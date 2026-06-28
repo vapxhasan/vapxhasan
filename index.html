@@ -1582,51 +1582,34 @@ footer {
           <span class="cl-arrow">→</span>
         </a>
       </div>
-  <form id="contactForm" action="https://formsubmit.co/ff08df4ff3cd4e6fd45ad624395d4e80" 
-      method="POST" class="contact-form reveal">
+ <!-- EmailJS Library -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
-  <!-- Auto-reply to client -->
-  <input type="hidden" name="_autoresponse" 
-    value="Thank you for contacting me! I have received your message and appreciate your interest in my services. I am already reviewing your inquiry and will get back to you with a detailed response as soon as possible. In the meantime, feel free to explore my website or portfolio. Best regards, Hasanur Rahman">
-
-  <!-- Email subject -->
-  <input type="hidden" name="_subject" value="New Contact Form Submission – VAPX">
-
-  <!-- Disable captcha -->
-  <input type="hidden" name="_captcha" value="false">
-
-  <!-- Honeypot spam protection -->
+<form id="contactForm" class="contact-form reveal">
   <input type="text" name="_honey" style="display:none">
-
   <div class="form-row">
     <div class="form-group">
       <label class="form-label">YOUR NAME</label>
-      <input type="text" name="name" class="form-input" placeholder="Alex Johnson" required>
+      <input type="text" id="name" class="form-input" placeholder="Alex Johnson" required>
     </div>
     <div class="form-group">
       <label class="form-label">YOUR EMAIL</label>
-      <input type="email" name="email" class="form-input" placeholder="alex@company.com" required>
+      <input type="email" id="email" class="form-input" placeholder="alex@company.com" required>
     </div>
   </div>
-
   <div class="form-group">
     <label class="form-label">SERVICE NEEDED</label>
-    <input type="text" name="service" class="form-input" 
-           placeholder="e.g. AI Automation, Graphic Design...">
+    <input type="text" id="service" class="form-input" placeholder="e.g. AI Automation, Graphic Design...">
   </div>
-
   <div class="form-group">
     <label class="form-label">YOUR BUDGET (USD)</label>
-    <input type="text" name="budget" class="form-input" placeholder="e.g. $200 – $500">
+    <input type="text" id="budget" class="form-input" placeholder="e.g. $200 – $500">
   </div>
-
   <div class="form-group">
     <label class="form-label">PROJECT DETAILS</label>
-    <textarea name="message" class="form-textarea" 
-              placeholder="Tell me about your project, goals, and timeline..." required></textarea>
+    <textarea id="message" class="form-textarea" placeholder="Tell me about your project, goals, and timeline..." required></textarea>
   </div>
 
-  <!-- Success Message (hidden by default) -->
   <div id="successMsg" style="
     display: none;
     background: linear-gradient(135deg, #00c6ff, #7b2ff7);
@@ -1644,6 +1627,64 @@ footer {
   <button type="submit" id="submitBtn" class="form-submit">Send Message →</button>
 </form>
 
+<script>
+  emailjs.init("e0awi-tK6bi_VJHzU");
+
+  const form = document.getElementById('contactForm');
+  const successMsg = document.getElementById('successMsg');
+  const submitBtn = document.getElementById('submitBtn');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    submitBtn.textContent = 'Sending...';
+    submitBtn.disabled = true;
+
+    const templateParams = {
+      from_name: document.getElementById('name').value,
+      from_email: document.getElementById('email').value,
+      service: document.getElementById('service').value,
+      budget: document.getElementById('budget').value,
+      message: document.getElementById('message').value,
+    };
+
+    try {
+      await emailjs.send("service_tfcdfkh", "template_z8eqf3f", templateParams);
+
+      const formData = new FormData();
+      formData.append('name', templateParams.from_name);
+      formData.append('email', templateParams.from_email);
+      formData.append('service', templateParams.service);
+      formData.append('budget', templateParams.budget);
+      formData.append('message', templateParams.message);
+      formData.append('_captcha', 'false');
+      formData.append('_subject', 'New Contact Form Submission – VAPX');
+
+      await fetch("https://formsubmit.co/ff08df4ff3cd4e6fd45ad624395d4e80", {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      form.reset();
+      successMsg.style.display = 'block';
+      submitBtn.textContent = 'Message Sent ✓';
+      submitBtn.style.opacity = '0.7';
+
+      setTimeout(() => {
+        successMsg.style.display = 'none';
+        submitBtn.textContent = 'Send Message →';
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+      }, 5000);
+
+    } catch (error) {
+      console.error('Error:', error);
+      submitBtn.textContent = 'Failed. Try Again';
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+      
 <script>
   const form = document.getElementById('contactForm');
   const successMsg = document.getElementById('successMsg');
