@@ -1577,34 +1577,32 @@ footer {
           <span class="cl-arrow">→</span>
         </a>
       </div>
-      <div class="contact-form reveal">
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">YOUR NAME</label>
-            <input type="text" class="form-input" placeholder="Alex Johnson">
-          </div>
-          <div class="form-group">
-            <label class="form-label">YOUR EMAIL</label>
-            <input type="email" class="form-input" placeholder="alex@company.com">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">SERVICE NEEDED</label>
-          <input type="text" class="form-input" placeholder="e.g. AI Automation, Graphic Design...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">YOUR BUDGET (USD)</label>
-          <input type="text" class="form-input" placeholder="e.g. $200 – $500">
-        </div>
-        <div class="form-group">
-          <label class="form-label">PROJECT DETAILS</label>
-          <textarea class="form-textarea" placeholder="Tell me about your project, goals, and timeline..."></textarea>
-        </div>
-        <button class="form-submit" onclick="handleSubmit(this)">Send Message →</button>
-      </div>
+      
+     <form action="https://formsubmit.co/vapxhasan@gmail.com" method="POST" class="contact-form reveal">
+  <div class="form-row">
+    <div class="form-group">
+      <label class="form-label">YOUR NAME</label>
+      <input type="text" name="name" class="form-input" placeholder="Alex Johnson" required>
+    </div>
+    <div class="form-group">
+      <label class="form-label">YOUR EMAIL</label>
+      <input type="email" name="email" class="form-input" placeholder="alex@company.com" required>
     </div>
   </div>
-</section>
+  <div class="form-group">
+    <label class="form-label">SERVICE NEEDED</label>
+    <input type="text" name="service" class="form-input" placeholder="e.g. AI Automation, Graphic Design...">
+  </div>
+  <div class="form-group">
+    <label class="form-label">YOUR BUDGET (USD)</label>
+    <input type="text" name="budget" class="form-input" placeholder="e.g. $200 – $500">
+  </div>
+  <div class="form-group">
+    <label class="form-label">PROJECT DETAILS</label>
+    <textarea name="message" class="form-textarea" placeholder="Tell me about your project, goals, and timeline..." required></textarea>
+  </div>
+  <button type="submit" class="form-submit">Send Message →</button>
+</form>
 
 <!-- FOOTER -->
 <footer>
