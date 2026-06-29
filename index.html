@@ -394,11 +394,9 @@ nav.scrolled {
 .marquee-track {
   display: flex;
   gap: 0;
-  animation: marquee 250s linear infinite;
   width: max-content;
   will-change: transform;
 }
-.marquee-wrap:hover .marquee-track { animation-play-state: paused; }
 .marquee-item {
   display: inline-flex;
   align-items: center;
@@ -414,9 +412,7 @@ nav.scrolled {
 }
 .marquee-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--indigo); flex-shrink: 0; }
 @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-@media (min-width: 768px) {
-  .marquee-track { animation-duration: 600s; }
-}
+
 
 /* ===== ABOUT ===== */
 #about { background: var(--bg2); }
@@ -2896,6 +2892,37 @@ async function initSharedData() {
   renderYtVideos();
   renderBlog();
 }
+
+// ===== MARQUEE — JS controlled (PC slow, mobile fast) =====
+(function() {
+  const track = document.getElementById('marqueeTrack');
+  if (!track) return;
+
+  let pos = 0;
+  let isPaused = false;
+  const wrap = track.parentElement;
+
+  // PC = 0.3px/frame (~18px/sec), Mobile = 0.8px/frame (~48px/sec)
+  const speed = window.innerWidth >= 1024 ? 0.3 : 0.8;
+
+  wrap.addEventListener('mouseenter', () => isPaused = true);
+  wrap.addEventListener('mouseleave', () => isPaused = false);
+
+  function getHalfWidth() {
+    return track.scrollWidth / 2;
+  }
+
+  function step() {
+    if (!isPaused) {
+      pos += speed;
+      if (pos >= getHalfWidth()) pos = 0;
+      track.style.transform = 'translateX(-' + pos + 'px)';
+    }
+    requestAnimationFrame(step);
+  }
+
+  requestAnimationFrame(step);
+})();
 
 initSharedData();
 document.querySelectorAll('a[href^="#"]').forEach(a => {
