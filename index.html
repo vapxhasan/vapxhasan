@@ -2546,39 +2546,27 @@ avatarInput.addEventListener('change', function() {
 // ===================================================
 const JSONBIN_READ_KEY  = '$2a$10$Rqfp0YIynu120n.kUAYFQORJDEMgl8nE33D5kj4buZBFouY5UMl6a';
 const JSONBIN_BIN_ID_KEY = 'vapx_jsonbin_id'; // bin ID localStorage-এ cache হবে
+const JSONBIN_BIN_ID_FIXED = '6a41fbeef5f4af5e293fa8a5'; // hardcoded — সব device-এ কাজ করবে
 let _masterKey = null; // শুধু admin login-এর পর memory-তে থাকবে
 
 // JSONBin bin তৈরি বা load করা
 async function getOrCreateBin() {
-  let binId = localStorage.getItem(JSONBIN_BIN_ID_KEY);
-  if (binId) return binId;
-  // প্রথমবার: নতুন bin তৈরি করো (Master Key দরকার)
-  if (!_masterKey) return null;
-  try {
-    const res = await fetch('https://api.jsonbin.io/v3/b', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': _masterKey,
-        'X-Bin-Name': 'vapx-portfolio-data',
-        'X-Bin-Private': 'true'
-      },
-      body: JSON.stringify({ yt_videos: [], yt_channel: { name: '@vapxhasan', sub: 'YouTube Channel · AI, Design & Automation', url: 'https://youtube.com/@vapxhasan' }, blog_posts: [] })
-    });
-    const data = await res.json();
-    binId = data.metadata?.id;
-    if (binId) localStorage.setItem(JSONBIN_BIN_ID_KEY, binId);
-    return binId;
-  } catch(e) { console.error('Bin create failed:', e); return null; }
+  // Hardcoded bin ID — সব device থেকে same data load হবে
+  localStorage.setItem(JSONBIN_BIN_ID_KEY, JSONBIN_BIN_ID_FIXED);
+  return JSONBIN_BIN_ID_FIXED;
 }
 
 async function cloudGet() {
-  const binId = localStorage.getItem(JSONBIN_BIN_ID_KEY);
-  if (!binId) return null;
+  const binId = JSONBIN_BIN_ID_FIXED;
+  // Private bin — Master Key দিয়ে read করতে হবে
+  // Master Key না থাকলে Access Key দিয়ে try করো
+  const key = _masterKey || JSONBIN_READ_KEY;
+  const headerKey = _masterKey ? 'X-Master-Key' : 'X-Access-Key';
   try {
     const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
-      headers: { 'X-Access-Key': JSONBIN_READ_KEY }
+      headers: { [headerKey]: key }
     });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     return data.record || null;
   } catch(e) { console.error('Cloud read failed:', e); return null; }
