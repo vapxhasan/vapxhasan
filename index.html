@@ -1078,7 +1078,7 @@ footer {
 /* ===== BLOG SECTION ===== */
 #blog { background: var(--bg2); }
 .blog-top { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 48px; }
-.blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+.blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 24px; }
 .blog-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -2432,10 +2432,8 @@ async function handleSubmit(btn) {
   };
 
   try {
-    // তোমার কাছে email যাবে (Contact Us template)
+    // তোমার কাছে email যাবে + EmailJS Auto-Reply client কে পাঠাবে
     await emailjs.send('service_tfcdfkh', 'template_z8eqf3f', templateParams);
-    // Public কে auto-reply যাবে
-    await emailjs.send('service_tfcdfkh', 'template_6r0z0rk', templateParams);
 
     // Google Sheets-এ data save করো
     fetch('https://script.google.com/macros/s/AKfycbyByiJazUQrjOuxE0xOjl7YaHSAn7nYF1fWaMXfAMOGVa91cQn_crerlWeRl4SY9WB4/exec', {
