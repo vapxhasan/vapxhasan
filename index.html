@@ -1270,6 +1270,22 @@ footer {
 </head>
 <body>
 
+<!-- ===== ADMIN BAR ===== -->
+<div id="adminBar" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,rgba(108,99,255,0.95),rgba(155,93,255,0.95));backdrop-filter:blur(12px);padding:10px 24px;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid rgba(255,255,255,0.15);font-family:'Inter',sans-serif;">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span style="font-size:16px;">🛡️</span>
+    <span style="font-size:13px;font-weight:700;color:#fff;">Admin Mode Active</span>
+    <span style="font-size:11px;color:rgba(255,255,255,0.65);font-family:monospace;">You can add, edit & delete content</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span style="font-size:11px;color:rgba(255,255,255,0.6);font-family:monospace;">Session only — closes when tab closes</span>
+    <button onclick="adminLogout()" style="padding:7px 18px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">🔓 Logout</button>
+  </div>
+</div>
+
+<!-- ===== ADMIN LOGIN BUTTON (always visible, bottom-left) ===== -->
+<button id="adminLoginBtn" onclick="adminLogin()" title="Admin Login" style="position:fixed;bottom:28px;left:28px;z-index:900;width:44px;height:44px;border-radius:50%;background:rgba(13,17,32,0.85);border:1px solid rgba(108,99,255,0.3);color:var(--muted);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.3);transition:all .25s;backdrop-filter:blur(8px);" onmouseover="this.style.borderColor='var(--indigo)';this.style.color='var(--white)'" onmouseout="this.style.borderColor='rgba(108,99,255,0.3)';this.style.color='var(--muted)'">🔐</button>
+
 <!-- Cursor glow -->
 <div class="cursor-glow" id="cursorGlow"></div>
 
@@ -2385,10 +2401,21 @@ const statObs = new IntersectionObserver((entries) => {
 const heroStats = document.querySelector('.hero-stats');
 if (heroStats) statObs.observe(heroStats);
 
-// ===== PROFILE IMAGE UPLOAD =====
+// ===== PROFILE IMAGE UPLOAD (persists in localStorage) =====
 const avatarInput = document.getElementById('avatarInput');
 const avatarImg = document.getElementById('avatarImg');
 const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+
+// Load saved avatar on page load
+(function() {
+  const saved = localStorage.getItem('vapx_avatar');
+  if (saved) {
+    avatarImg.src = saved;
+    avatarImg.style.display = 'block';
+    avatarPlaceholder.style.display = 'none';
+  }
+})();
+
 avatarInput.addEventListener('change', function() {
   const file = this.files[0];
   if (!file) return;
@@ -2397,23 +2424,160 @@ avatarInput.addEventListener('change', function() {
     avatarImg.src = e.target.result;
     avatarImg.style.display = 'block';
     avatarPlaceholder.style.display = 'none';
+    try { localStorage.setItem('vapx_avatar', e.target.result); } catch(err) { console.warn('Avatar too large for localStorage'); }
   };
   reader.readAsDataURL(file);
 });
 
-// ===== YOUTUBE SECTION =====
-let ytVideos = JSON.parse(localStorage.getItem('ytVideos') || '[]');
-let ytChannel = JSON.parse(localStorage.getItem('ytChannel') || '{"name":"@vapxhasan","sub":"YouTube Channel · Click to set up your channel info","url":"https://youtube.com/@vapxhasan"}');
+// ===================================================
+// JSONBIN CONFIG
+// ===================================================
+const JSONBIN_READ_KEY  = '$2a$10$Rqfp0YIynu120n.kUAYFQORJDEMgl8nE33D5kj4buZBFouY5UMl6a';
+const JSONBIN_BIN_ID_KEY = 'vapx_jsonbin_id'; // bin ID localStorage-এ cache হবে
+let _masterKey = null; // শুধু admin login-এর পর memory-তে থাকবে
+
+// JSONBin bin তৈরি বা load করা
+async function getOrCreateBin() {
+  let binId = localStorage.getItem(JSONBIN_BIN_ID_KEY);
+  if (binId) return binId;
+  // প্রথমবার: নতুন bin তৈরি করো (Master Key দরকার)
+  if (!_masterKey) return null;
+  try {
+    const res = await fetch('https://api.jsonbin.io/v3/b', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': _masterKey,
+        'X-Bin-Name': 'vapx-portfolio-data',
+        'X-Bin-Private': 'true'
+      },
+      body: JSON.stringify({ yt_videos: [], yt_channel: { name: '@vapxhasan', sub: 'YouTube Channel · AI, Design & Automation', url: 'https://youtube.com/@vapxhasan' }, blog_posts: [] })
+    });
+    const data = await res.json();
+    binId = data.metadata?.id;
+    if (binId) localStorage.setItem(JSONBIN_BIN_ID_KEY, binId);
+    return binId;
+  } catch(e) { console.error('Bin create failed:', e); return null; }
+}
+
+async function cloudGet() {
+  const binId = localStorage.getItem(JSONBIN_BIN_ID_KEY);
+  if (!binId) return null;
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+      headers: { 'X-Access-Key': JSONBIN_READ_KEY }
+    });
+    const data = await res.json();
+    return data.record || null;
+  } catch(e) { console.error('Cloud read failed:', e); return null; }
+}
+
+async function cloudSet(record) {
+  const binId = await getOrCreateBin();
+  if (!binId || !_masterKey) return false;
+  try {
+    await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': _masterKey
+      },
+      body: JSON.stringify(record)
+    });
+    return true;
+  } catch(e) { console.error('Cloud write failed:', e); return false; }
+}
+
+// In-memory cache (পুরো record একসাথে)
+let _record = { yt_videos: [], yt_channel: { name: '@vapxhasan', sub: 'YouTube Channel · AI, Design & Automation', url: 'https://youtube.com/@vapxhasan' }, blog_posts: [] };
+
+// ===================================================
+// ADMIN PASSWORD SYSTEM
+// ===================================================
+const ADMIN_PASS_HASH = 'H@san1042004'; // password এখানে
+let isAdmin = false;
+
+function checkAdmin() {
+  const stored = sessionStorage.getItem('vapx_admin_ok');
+  if (stored === '1') {
+    // session থেকে master key ফিরিয়ে আনো (sessionStorage-এ obfuscated রাখা হয়েছে)
+    const mk = sessionStorage.getItem('vapx_mk');
+    if (mk) { _masterKey = atob(mk); isAdmin = true; showAdminUI(); }
+  }
+}
+
+async function adminLogin() {
+  const pass = prompt('🔐 Enter Admin Password:');
+  if (!pass) return;
+  if (pass !== ADMIN_PASS_HASH) { alert('❌ Wrong password!'); return; }
+
+  // Password সঠিক — এখন Master Key চাও
+  const mk = prompt('🔑 Enter your JSONBin Master Key:');
+  if (!mk || !mk.startsWith('$2a$')) { alert('❌ Invalid Master Key format!'); return; }
+
+  _masterKey = mk;
+  // Session-এ encode করে রাখো (page reload-এও admin থাকবে)
+  sessionStorage.setItem('vapx_admin_ok', '1');
+  sessionStorage.setItem('vapx_mk', btoa(mk));
+  isAdmin = true;
+
+  // Bin না থাকলে তৈরি করো
+  const binId = await getOrCreateBin();
+  if (!binId) { alert('❌ Failed to connect to JSONBin. Check your Master Key.'); return; }
+
+  showAdminUI();
+  renderYtVideos();
+  renderBlog();
+  alert('✅ Admin mode activated! Data synced to cloud.');
+}
+
+function adminLogout() {
+  sessionStorage.removeItem('vapx_admin_ok');
+  sessionStorage.removeItem('vapx_mk');
+  _masterKey = null;
+  isAdmin = false;
+  hideAdminUI();
+  renderYtVideos();
+  renderBlog();
+}
+
+function showAdminUI() {
+  document.getElementById('adminBar').style.display = 'flex';
+  document.getElementById('adminLoginBtn').style.display = 'none';
+  document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'inline-flex');
+}
+
+function hideAdminUI() {
+  document.getElementById('adminBar').style.display = 'none';
+  document.getElementById('adminLoginBtn').style.display = 'flex';
+  document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+}
+
+// ===================================================
+// SHARED STORAGE HELPERS (JSONBin cloud — GitHub Pages compatible)
+// ===================================================
+async function sharedGet(key) {
+  // _record থেকেই দাও (initSharedData তে লোড হয়েছে)
+  return _record[key] ?? null;
+}
+
+async function sharedSet(key, val) {
+  _record[key] = val;
+  await cloudSet(_record);
+}
+
+// ===================================================
+// YOUTUBE SECTION
+// ===================================================
+let ytVideos = [];
+let ytChannel = { name: '@vapxhasan', sub: 'YouTube Channel · AI, Design & Automation', url: 'https://youtube.com/@vapxhasan' };
 
 function getYtId(url) {
   const patterns = [
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([A-Za-z0-9_-]{11})/,
     /^([A-Za-z0-9_-]{11})$/
   ];
-  for (const p of patterns) {
-    const m = url.match(p);
-    if (m) return m[1];
-  }
+  for (const p of patterns) { const m = url.match(p); if (m) return m[1]; }
   return null;
 }
 
@@ -2430,11 +2594,11 @@ let ytShowCount = 6;
 function renderYtVideos() {
   const grid = document.getElementById('ytVideosGrid');
   const empty = document.getElementById('ytEmpty');
-  const loadMoreWrap = document.getElementById('ytLoadMoreWrap');
-  if (ytVideos.length === 0) {
+  const lmw = document.getElementById('ytLoadMoreWrap');
+  if (!ytVideos.length) {
     grid.innerHTML = '';
     empty.style.display = 'block';
-    if(loadMoreWrap) loadMoreWrap.style.display = 'none';
+    if (lmw) lmw.style.display = 'none';
     return;
   }
   empty.style.display = 'none';
@@ -2442,19 +2606,19 @@ function renderYtVideos() {
   grid.innerHTML = visible.map((v, i) => `
     <div class="yt-video-card reveal visible">
       <div class="yt-thumb-wrap">
-        <iframe src="https://www.youtube.com/embed/${v.id}" title="${v.title || 'YouTube Video'}" allowfullscreen loading="lazy"></iframe>
+        <iframe src="https://www.youtube.com/embed/${v.id}" title="${v.title||'YouTube Video'}" allowfullscreen loading="lazy"></iframe>
       </div>
       <div class="yt-video-body">
-        <div class="yt-video-title">${v.title || 'YouTube Video'}</div>
+        <div class="yt-video-title">${v.title||'YouTube Video'}</div>
         <div class="yt-video-meta" style="display:flex;justify-content:space-between;align-items:center;">
           <span>${v.date}</span>
-          <button onclick="removeYtVideo(${i})" style="background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3);color:#ff6666;border-radius:5px;padding:3px 9px;cursor:pointer;font-size:11px;">✕ Remove</button>
+          ${isAdmin ? `<button onclick="removeYtVideo(${i})" class="admin-only" style="background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3);color:#ff6666;border-radius:5px;padding:3px 9px;cursor:pointer;font-size:11px;display:inline-flex;">✕ Remove</button>` : ''}
         </div>
       </div>
     </div>
   `).join('');
-  if (!loadMoreWrap) return;
-  loadMoreWrap.style.display = 'flex';
+  if (!lmw) return;
+  lmw.style.display = 'flex';
   document.getElementById('ytVideoCount').textContent = `Showing ${Math.min(ytShowCount, ytVideos.length)} of ${ytVideos.length} video${ytVideos.length !== 1 ? 's' : ''}`;
   document.getElementById('ytLoadMoreBtn').style.display = ytVideos.length > ytShowCount ? 'inline-flex' : 'none';
   document.getElementById('ytShowLessBtn').style.display = ytShowCount > 6 ? 'inline-flex' : 'none';
@@ -2462,57 +2626,70 @@ function renderYtVideos() {
 function ytLoadMore() { ytShowCount += 6; renderYtVideos(); }
 function ytShowLess() { ytShowCount = 6; renderYtVideos(); document.getElementById('youtube').scrollIntoView({behavior:'smooth'}); }
 
-function addYtVideo() {
+async function addYtVideo() {
+  if (!isAdmin) return;
   const url = document.getElementById('ytUrlInput').value.trim();
   const title = document.getElementById('ytTitleInput').value.trim();
   if (!url) return;
   const id = getYtId(url);
-  if (!id) { alert('Invalid YouTube URL. Please paste a valid video link.'); return; }
-  ytVideos.unshift({ id, title: title || 'YouTube Video', date: new Date().toLocaleDateString('en-US', {year:'numeric',month:'short',day:'numeric'}) });
-  localStorage.setItem('ytVideos', JSON.stringify(ytVideos));
+  if (!id) { alert('❌ Invalid YouTube URL!'); return; }
+  const btn = document.querySelector('#ytModal .yt-modal-add');
+  btn.textContent = 'Saving...'; btn.disabled = true;
+  ytVideos.unshift({ id, title: title || 'YouTube Video', date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) });
+  await sharedSet('yt_videos', ytVideos);
   document.getElementById('ytUrlInput').value = '';
   document.getElementById('ytTitleInput').value = '';
   document.getElementById('ytModal').classList.remove('open');
+  btn.textContent = 'Add Video →'; btn.disabled = false;
   renderYtVideos();
 }
 
-function removeYtVideo(i) {
+async function removeYtVideo(i) {
+  if (!isAdmin) return;
+  if (!confirm('Remove this video?')) return;
   ytVideos.splice(i, 1);
-  localStorage.setItem('ytVideos', JSON.stringify(ytVideos));
+  await sharedSet('yt_videos', ytVideos);
   renderYtVideos();
 }
 
-function saveChannelInfo() {
+async function saveChannelInfo() {
+  if (!isAdmin) return;
   ytChannel.name = document.getElementById('ytChNameInput').value.trim() || ytChannel.name;
-  ytChannel.sub = document.getElementById('ytChSubInput').value.trim() || ytChannel.sub;
-  ytChannel.url = document.getElementById('ytChUrlInput').value.trim() || ytChannel.url;
-  localStorage.setItem('ytChannel', JSON.stringify(ytChannel));
+  ytChannel.sub  = document.getElementById('ytChSubInput').value.trim()  || ytChannel.sub;
+  ytChannel.url  = document.getElementById('ytChUrlInput').value.trim()  || ytChannel.url;
+  await sharedSet('yt_channel', ytChannel);
   renderYtChannel();
   document.getElementById('ytChannelModal').classList.remove('open');
 }
 
-document.getElementById('openYtModal').addEventListener('click', () => document.getElementById('ytModal').classList.add('open'));
+// modal listeners
+document.getElementById('openYtModal').addEventListener('click', () => {
+  if (!isAdmin) { alert('🔐 Admin login required. Click the 🔐 Admin button.'); return; }
+  document.getElementById('ytModal').classList.add('open');
+});
 document.getElementById('closeYtModal').addEventListener('click', () => document.getElementById('ytModal').classList.remove('open'));
-document.getElementById('ytModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('open'); });
-document.getElementById('openChannelEdit').addEventListener('click', () => document.getElementById('ytChannelModal').classList.add('open'));
+document.getElementById('ytModal').addEventListener('click', e => { if (e.target===e.currentTarget) e.currentTarget.classList.remove('open'); });
+document.getElementById('openChannelEdit').addEventListener('click', () => {
+  if (!isAdmin) { alert('🔐 Admin login required.'); return; }
+  document.getElementById('ytChannelModal').classList.add('open');
+});
 document.getElementById('closeChannelModal').addEventListener('click', () => document.getElementById('ytChannelModal').classList.remove('open'));
-document.getElementById('ytChannelModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('open'); });
+document.getElementById('ytChannelModal').addEventListener('click', e => { if (e.target===e.currentTarget) e.currentTarget.classList.remove('open'); });
 
-renderYtChannel();
-renderYtVideos();
-
-// ===== BLOG SECTION =====
-let blogPosts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
+// ===================================================
+// BLOG SECTION
+// ===================================================
+let blogPosts = [];
 
 let blogShowCount = 6;
 function renderBlog() {
   const grid = document.getElementById('blogGrid');
   const empty = document.getElementById('blogEmpty');
-  const loadMoreWrap = document.getElementById('blogLoadMoreWrap');
-  if (blogPosts.length === 0) {
+  const lmw = document.getElementById('blogLoadMoreWrap');
+  if (!blogPosts.length) {
     grid.innerHTML = '';
     empty.style.display = 'block';
-    if(loadMoreWrap) loadMoreWrap.style.display = 'none';
+    if (lmw) lmw.style.display = 'none';
     return;
   }
   empty.style.display = 'none';
@@ -2521,70 +2698,101 @@ function renderBlog() {
     <div class="blog-card reveal visible">
       <div class="blog-thumb">
         <div class="blog-thumb-glow" style="background:rgba(108,99,255,0.35)"></div>
-        ${p.emoji || '📝'}
+        ${p.emoji||'📝'}
       </div>
       <div class="blog-body">
-        <div class="blog-cat">${p.cat || 'Article'}</div>
+        <div class="blog-cat">${p.cat||'Article'}</div>
         <div class="blog-title">${p.title}</div>
-        <div class="blog-excerpt">${(p.content || '').substring(0, 120)}${p.content && p.content.length > 120 ? '...' : ''}</div>
+        <div class="blog-excerpt">${(p.content||'').substring(0,130)}${p.content&&p.content.length>130?'...':''}</div>
         <div class="blog-meta">
           <span>${p.date}</span>
-          <div style="display:flex;gap:8px;">
+          <div style="display:flex;gap:8px;align-items:center;">
             <span class="blog-read-btn" onclick="openBlogRead(${i})">Read More →</span>
-            <button onclick="removeBlogPost(${i})" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;font-family:var(--font-mono);">✕</button>
+            ${isAdmin ? `<button onclick="removeBlogPost(${i})" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;display:inline-flex;">✕</button>` : ''}
           </div>
         </div>
       </div>
     </div>
   `).join('');
-  if (!loadMoreWrap) return;
-  loadMoreWrap.style.display = 'flex';
-  document.getElementById('blogPostCount').textContent = `Showing ${Math.min(blogShowCount, blogPosts.length)} of ${blogPosts.length} post${blogPosts.length !== 1 ? 's' : ''}`;
+  if (!lmw) return;
+  lmw.style.display = 'flex';
+  document.getElementById('blogPostCount').textContent = `Showing ${Math.min(blogShowCount, blogPosts.length)} of ${blogPosts.length} post${blogPosts.length!==1?'s':''}`;
   document.getElementById('blogLoadMoreBtn').style.display = blogPosts.length > blogShowCount ? 'inline-flex' : 'none';
   document.getElementById('blogShowLessBtn').style.display = blogShowCount > 6 ? 'inline-flex' : 'none';
 }
 function blogLoadMore() { blogShowCount += 6; renderBlog(); }
 function blogShowLess() { blogShowCount = 6; renderBlog(); document.getElementById('blog').scrollIntoView({behavior:'smooth'}); }
 
-function publishBlog() {
-  const title = document.getElementById('blogTitleInput').value.trim();
-  const cat = document.getElementById('blogCatInput').value.trim();
-  const emoji = document.getElementById('blogEmojiInput').value.trim();
+async function publishBlog() {
+  if (!isAdmin) return;
+  const title   = document.getElementById('blogTitleInput').value.trim();
+  const cat     = document.getElementById('blogCatInput').value.trim();
+  const emoji   = document.getElementById('blogEmojiInput').value.trim();
   const content = document.getElementById('blogContentInput').value.trim();
-  if (!title || !content) { alert('Please fill in the title and content.'); return; }
-  blogPosts.unshift({ title, cat: cat || 'Article', emoji: emoji || '📝', content, date: new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'}) });
-  localStorage.setItem('blogPosts', JSON.stringify(blogPosts));
+  if (!title || !content) { alert('Please fill title and content!'); return; }
+  const btn = document.querySelector('#blogModal .blog-modal-publish');
+  btn.textContent = 'Publishing...'; btn.disabled = true;
+  blogPosts.unshift({ title, cat: cat||'Article', emoji: emoji||'📝', content, date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) });
+  await sharedSet('blog_posts', blogPosts);
   document.getElementById('blogTitleInput').value = '';
   document.getElementById('blogCatInput').value = '';
   document.getElementById('blogEmojiInput').value = '📝';
   document.getElementById('blogContentInput').value = '';
   document.getElementById('blogModal').classList.remove('open');
+  btn.textContent = 'Publish →'; btn.disabled = false;
   renderBlog();
 }
 
-function removeBlogPost(i) {
+async function removeBlogPost(i) {
+  if (!isAdmin) return;
   if (!confirm('Delete this post?')) return;
   blogPosts.splice(i, 1);
-  localStorage.setItem('blogPosts', JSON.stringify(blogPosts));
+  await sharedSet('blog_posts', blogPosts);
   renderBlog();
 }
 
 function openBlogRead(i) {
   const p = blogPosts[i];
-  document.getElementById('blogReadCat').textContent = p.cat || 'Article';
+  document.getElementById('blogReadCat').textContent = p.cat||'Article';
   document.getElementById('blogReadTitle').textContent = p.title;
   document.getElementById('blogReadMeta').textContent = p.date;
   document.getElementById('blogReadContent').textContent = p.content;
   document.getElementById('blogReadModal').classList.add('open');
 }
 function closeBlogRead() { document.getElementById('blogReadModal').classList.remove('open'); }
-document.getElementById('blogReadModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeBlogRead(); });
+document.getElementById('blogReadModal').addEventListener('click', e => { if (e.target===e.currentTarget) closeBlogRead(); });
 
-document.getElementById('openBlogModal').addEventListener('click', () => document.getElementById('blogModal').classList.add('open'));
+document.getElementById('openBlogModal').addEventListener('click', () => {
+  if (!isAdmin) { alert('🔐 Admin login required. Click the 🔐 Admin button.'); return; }
+  document.getElementById('blogModal').classList.add('open');
+});
 document.getElementById('closeBlogModal').addEventListener('click', () => document.getElementById('blogModal').classList.remove('open'));
-document.getElementById('blogModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('open'); });
+document.getElementById('blogModal').addEventListener('click', e => { if (e.target===e.currentTarget) e.currentTarget.classList.remove('open'); });
 
-renderBlog();
+// ===================================================
+// INIT — load from JSONBin cloud, then render
+// ===================================================
+async function initSharedData() {
+  document.getElementById('ytVideosGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);">☁️ Loading from cloud...</div>';
+  document.getElementById('blogGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);">☁️ Loading from cloud...</div>';
+
+  // Admin session check (master key sessionStorage-এ থাকলে restore করো)
+  checkAdmin();
+
+  const record = await cloudGet();
+  if (record) {
+    _record = record;
+    if (record.yt_videos)  ytVideos  = record.yt_videos;
+    if (record.yt_channel) ytChannel = record.yt_channel;
+    if (record.blog_posts) blogPosts = record.blog_posts;
+  }
+
+  renderYtChannel();
+  renderYtVideos();
+  renderBlog();
+}
+
+initSharedData();
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
     const target = document.querySelector(a.getAttribute('href'));
