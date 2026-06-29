@@ -394,7 +394,7 @@ nav.scrolled {
 .marquee-track {
   display: flex;
   gap: 0;
-  animation: marquee 120s linear infinite;
+  animation: marquee 250s linear infinite;
   width: max-content;
   will-change: transform;
 }
@@ -414,6 +414,9 @@ nav.scrolled {
 }
 .marquee-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--indigo); flex-shrink: 0; }
 @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+@media (min-width: 768px) {
+  .marquee-track { animation-duration: 600s; }
+}
 
 /* ===== ABOUT ===== */
 #about { background: var(--bg2); }
