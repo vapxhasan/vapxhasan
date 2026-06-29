@@ -112,7 +112,7 @@ nav.scrolled {
   background-clip: text;
 }
 .nav-logo span { font-family: var(--font-mono); font-size: 14px; opacity: .5; }
-.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links { display: flex; gap: 24px; list-style: none; }
 .nav-links a {
   font-size: 13px;
   font-weight: 500;
@@ -340,6 +340,28 @@ nav.scrolled {
 
 /* Floating icons */
 .hero-floats { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.float-chip {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--muted);
+  background: rgba(17,24,39,0.7);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--border);
+  padding: 9px 16px;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+.fc-icon { font-size: 14px; }
+.fc1 { top: 14%; right: 8%; animation: floatChip 7s ease-in-out infinite; border-color: rgba(108,99,255,0.3); }
+.fc2 { top: 38%; right: 18%; animation: floatChip 8s ease-in-out infinite .8s; border-color: rgba(0,212,255,0.3); }
+.fc3 { top: 60%; right: 6%; animation: floatChip 6.5s ease-in-out infinite 1.4s; border-color: rgba(155,93,255,0.3); }
+.fc4 { top: 80%; right: 22%; animation: floatChip 7.5s ease-in-out infinite .4s; border-color: rgba(0,212,255,0.3); }
+@keyframes floatChip { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+@media (max-width: 1180px) { .float-chip { display: none; } }
 .float-icon {
   position: absolute;
   width: 44px; height: 44px;
@@ -665,6 +687,37 @@ nav.scrolled {
 .step-title { font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
 .step-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
 
+/* ===== PRICING ===== */
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: start; margin-top: 20px; }
+.pricing-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 32px 28px;
+  position: relative;
+  transition: all .3s ease;
+}
+.pricing-card:hover { transform: translateY(-6px); border-color: rgba(108,99,255,0.35); box-shadow: 0 20px 60px rgba(108,99,255,0.12); }
+.pricing-card-featured { border-color: var(--indigo); box-shadow: 0 0 0 1px var(--indigo), 0 20px 60px rgba(108,99,255,0.18); }
+.pricing-card-featured:hover { transform: translateY(-6px) scale(1.01); }
+.pricing-popular {
+  position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--indigo), var(--violet));
+  color: #fff; font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px;
+  padding: 5px 16px; border-radius: 100px; white-space: nowrap;
+}
+.pricing-plan { font-family: var(--font-mono); font-size: 12px; color: var(--cyan); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; }
+.pricing-price { font-family: var(--font-display); font-weight: 800; font-size: 38px; margin-bottom: 12px; color: var(--white); }
+.price-currency { font-size: 18px; vertical-align: top; color: var(--muted); }
+.price-period { font-size: 13px; color: var(--muted); font-weight: 400; }
+.pricing-desc { color: var(--muted); font-size: 13.5px; margin-bottom: 24px; min-height: 56px; line-height: 1.6; }
+.pricing-features { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; list-style: none; }
+.pricing-features li { display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: var(--white); }
+.pricing-features li.unavailable { color: var(--muted); opacity: .55; }
+.pricing-features svg { flex-shrink: 0; }
+.pricing-cta { display: block; text-align: center; }
+@media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; } .pricing-card-featured { transform: none; } }
+
 /* ===== FAQ ===== */
 #faq { background: var(--bg2); }
 .faq-list { max-width: 720px; margin: 48px auto 0; display: flex; flex-direction: column; gap: 12px; }
@@ -892,6 +945,8 @@ footer {
         <li><a href="#services">Services</a></li>
         <li><a href="#portfolio">Work</a></li>
         <li><a href="#skills">Skills</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#pricing">Pricing</a></li>
         <li><a href="#testimonials">Reviews</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
@@ -910,6 +965,8 @@ footer {
   <a href="#services" class="mm-link">Services</a>
   <a href="#portfolio" class="mm-link">Work</a>
   <a href="#skills" class="mm-link">Skills</a>
+  <a href="#process" class="mm-link">Process</a>
+  <a href="#pricing" class="mm-link">Pricing</a>
   <a href="#testimonials" class="mm-link">Reviews</a>
   <a href="#contact" class="mm-link">Contact</a>
 </div>
@@ -920,7 +977,10 @@ footer {
   <div class="hero-orb orb2"></div>
   <div class="hero-orb orb3"></div>
   <div class="hero-floats">
-    
+    <div class="float-chip fc1"><span class="fc-icon">🧠</span>Prompt Engineering</div>
+    <div class="float-chip fc2"><span class="fc-icon">⚙️</span>AI Automation</div>
+    <div class="float-chip fc3"><span class="fc-icon">🎨</span>Graphic Design</div>
+    <div class="float-chip fc4"><span class="fc-icon">🎬</span>Video Editing</div>
   </div>
   <div class="container">
     <div class="hero-content">
@@ -1473,6 +1533,65 @@ footer {
         <div class="step-title">Delivery</div>
         <div class="step-desc">Final files, documentation, and support — delivered clean, organized, and ready to use.</div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="section">
+  <div class="container">
+    <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto 48px;">
+      <div class="section-label" style="justify-content:center">Investment</div>
+      <h2 class="section-title" style="text-align:center">Simple <span>Pricing</span></h2>
+      <p class="section-sub" style="margin:0 auto">Pick a package, or message me for a custom quote on combined services.</p>
+    </div>
+    <div class="pricing-grid">
+
+      <div class="pricing-card reveal">
+        <div class="pricing-plan">Starter</div>
+        <div class="pricing-price"><span class="price-currency">$</span>99</div>
+        <div class="pricing-desc">Perfect for a single deliverable — a logo, a thumbnail set, or a prompt pack.</div>
+        <ul class="pricing-features">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1AB65D" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>1 design or content deliverable</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1AB65D" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Up to 10 AI-generated visuals</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1AB65D" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>2 revision rounds</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1AB65D" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>3-day delivery</li>
+          <li class="unavailable"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>AI automation setup</li>
+          <li class="unavailable"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Priority support</li>
+        </ul>
+        <a href="#contact" class="btn-ghost pricing-cta">Get Started</a>
+      </div>
+
+      <div class="pricing-card pricing-card-featured reveal">
+        <div class="pricing-popular">Most Popular</div>
+        <div class="pricing-plan">Creator</div>
+        <div class="pricing-price"><span class="price-currency">$</span>349</div>
+        <div class="pricing-desc">For creators and small brands who need ongoing content, design, or video.</div>
+        <ul class="pricing-features">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6C63FF" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Full brand kit or 1-month content batch</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6C63FF" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>1 video edit (up to 5 min)</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6C63FF" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>AI voiceover or music add-on</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6C63FF" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>3 revision rounds</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6C63FF" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>5-day delivery</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6C63FF" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Priority support</li>
+        </ul>
+        <a href="#contact" class="btn-primary pricing-cta"><span>Get Started</span></a>
+      </div>
+
+      <div class="pricing-card reveal">
+        <div class="pricing-plan">Automation Pro</div>
+        <div class="pricing-price">Custom</div>
+        <div class="pricing-desc">For businesses that want a full AI-powered content & automation system.</div>
+        <ul class="pricing-features">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1AB65D" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Everything in Creator</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1AB65D" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Custom AI automation workflow</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1AB65D" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Ongoing monthly content pipeline</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1AB65D" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>24–48hr priority turnaround</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1AB65D" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Monthly retainer available</li>
+        </ul>
+        <a href="#contact" class="btn-ghost pricing-cta">Let's Talk</a>
+      </div>
+
     </div>
   </div>
 </section>
