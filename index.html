@@ -11,6 +11,28 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDb5Q289UUYHkXSa4wYP74hisA5g9vzH8A",
+    authDomain: "vapxhasan-fb806.firebaseapp.com",
+    databaseURL: "https://vapxhasan-fb806-default-rtdb.firebaseio.com/",
+    projectId: "vapxhasan-fb806",
+    storageBucket: "vapxhasan-fb806.firebasestorage.app",
+    messagingSenderId: "174861521382",
+    appId: "1:174861521382:web:698270169877af5b8f4627"
+  };
+
+  const fbApp = initializeApp(firebaseConfig);
+  const fbDb  = getDatabase(fbApp);
+
+  // expose to the regular (non-module) script below
+  window._fb = { ref, get, set, db: fbDb };
+  window._fbReady = true;
+  window.dispatchEvent(new Event('firebase-ready'));
+</script>
 <style>
 /* ===== RESET & BASE ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -707,7 +729,7 @@ nav.scrolled {
   letter-spacing: 1px; text-transform: uppercase;
   backdrop-filter: blur(4px);
 }
-/* Pricing edit modal */
+/* Pricing edit modal (used by Client Custom Pricing modal) */
 .pricing-edit-modal {
   display: none; position: fixed; inset: 0; z-index: 3000;
   background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
@@ -741,61 +763,6 @@ nav.scrolled {
   resize: vertical; transition: border .2s;
 }
 .pef-textarea:focus { border-color: var(--indigo); }
-.pef-section-title {
-  font-size: 11px; font-family: var(--font-mono); color: var(--cyan);
-  letter-spacing: 2px; text-transform: uppercase; margin: 16px 0 8px;
-}
-.pef-feature-row {
-  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
-}
-.pef-feature-row input {
-  flex: 1; background: var(--card); border: 1px solid var(--border);
-  border-radius: 7px; padding: 8px 12px; color: var(--white);
-  font-size: 13px; outline: none; font-family: inherit;
-}
-.pef-feature-row input:focus { border-color: var(--indigo); }
-.pef-feature-check {
-  width: 18px; height: 18px; accent-color: var(--indigo); cursor: pointer; flex-shrink: 0;
-}
-.pef-add-feat-btn {
-  font-size: 12px; color: var(--cyan); background: none; border: 1px dashed rgba(0,212,255,0.3);
-  border-radius: 7px; padding: 6px 14px; cursor: pointer; font-family: var(--font-mono);
-  width: 100%; margin-bottom: 8px; transition: all .2s;
-}
-.pef-add-feat-btn:hover { background: rgba(0,212,255,0.07); }
-.pricing-admin-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 11px; font-family: var(--font-mono);
-  background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.25);
-  color: var(--indigo); border-radius: 7px; padding: 5px 12px;
-  cursor: pointer; margin-top: 10px; transition: all .2s;
-}
-.pricing-admin-btn:hover { background: rgba(108,99,255,0.2); }
-/* Client custom pricing */
-.client-pricing-section {
-  margin-top: 40px; padding-top: 30px;
-  border-top: 1px solid var(--border);
-  display: none;
-}
-.client-pricing-section.visible { display: block; }
-.client-pricing-card {
-  background: var(--card2); border: 1px solid rgba(0,212,255,0.2);
-  border-radius: 14px; padding: 24px; margin-bottom: 16px;
-  position: relative;
-}
-.client-pricing-label {
-  font-size: 10px; font-family: var(--font-mono); color: var(--cyan);
-  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px;
-}
-.client-pricing-name { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
-.client-pricing-price { font-size: 28px; font-weight: 800; color: var(--white); margin-bottom: 8px; }
-.client-pricing-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
-.client-pricing-remove {
-  position: absolute; top: 14px; right: 14px;
-  background: rgba(255,50,50,0.1); border: 1px solid rgba(255,50,50,0.2);
-  color: #ff7777; border-radius: 6px; padding: 4px 10px;
-  font-size: 11px; cursor: pointer; font-family: var(--font-mono);
-}
 @media (max-width: 600px) {
   .pricing-edit-inner { padding: 20px 16px; }
   .project-media-wrap { height: 140px; }
@@ -1085,6 +1052,45 @@ nav.scrolled {
 .fiv-custom-arrow { margin-left: auto; color: var(--cyan); font-size: 18px; transition: transform .2s; }
 .fiv-custom-card:hover .fiv-custom-arrow { transform: translateX(4px); }
 @media (max-width: 600px) { .fiv-wrap { max-width: 100%; } }
+
+/* ===== CLIENT CUSTOM PRICING ===== */
+.client-pricing-wrap { display: none; max-width: 900px; margin: 0 auto; }
+.client-pricing-wrap.visible { display: block; }
+.client-pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+}
+.client-pricing-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(108,99,255,0.08));
+  border: 1px solid rgba(0,212,255,0.25);
+  border-radius: 16px;
+  padding: 24px 22px;
+  transition: transform .2s, box-shadow .2s;
+}
+.client-pricing-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,212,255,0.12); }
+.client-pricing-label {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  background: rgba(0,212,255,0.1);
+  border: 1px solid rgba(0,212,255,0.25);
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+.client-pricing-name { font-family: var(--font-display); font-size: 17px; font-weight: 800; color: var(--white); margin-bottom: 6px; }
+.client-pricing-price { font-family: var(--font-display); font-size: 26px; font-weight: 800; color: var(--cyan); margin-bottom: 8px; }
+.client-pricing-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
+.client-pricing-remove {
+  position: absolute; top: 14px; right: 14px;
+  background: rgba(255,50,50,0.1); border: 1px solid rgba(255,50,50,0.25);
+  color: #ff7777; border-radius: 7px; padding: 4px 10px; font-size: 11px; cursor: pointer;
+}
 
 /* ===== FAQ ===== */
 #faq { background: var(--bg2); }
@@ -1670,13 +1676,9 @@ footer {
     <div style="font-size:13px;color:#8B95B0;margin-bottom:24px;">Enter your credentials to access the admin panel.</div>
     <div style="margin-bottom:14px;">
       <label style="font-size:12px;color:#8B95B0;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">Password</label>
-      <input id="adminPassInput" type="password" placeholder="Admin password" style="width:100%;padding:10px 14px;background:#0D1120;border:1px solid rgba(108,99,255,0.25);border-radius:8px;color:#E8EAF0;font-size:14px;outline:none;font-family:inherit;" onkeydown="if(event.key==='Enter')document.getElementById('adminMkInput').focus()">
+      <input id="adminPassInput" type="password" placeholder="Admin password" style="width:100%;padding:10px 14px;background:#0D1120;border:1px solid rgba(108,99,255,0.25);border-radius:8px;color:#E8EAF0;font-size:14px;outline:none;font-family:inherit;" onkeydown="if(event.key==='Enter')doAdminLogin()">
     </div>
-    <div style="margin-bottom:22px;">
-      <label style="font-size:12px;color:#8B95B0;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">JSONBin Master Key</label>
-      <input id="adminMkInput" type="password" placeholder="$2a$10$..." style="width:100%;padding:10px 14px;background:#0D1120;border:1px solid rgba(108,99,255,0.25);border-radius:8px;color:#E8EAF0;font-size:14px;outline:none;font-family:inherit;" onkeydown="if(event.key==='Enter')doAdminLogin()">
-    </div>
-    <div id="adminLoginError" style="display:none;color:#ff6666;font-size:13px;margin-bottom:14px;padding:8px 12px;background:rgba(255,0,0,0.08);border-radius:6px;border:1px solid rgba(255,0,0,0.15);">❌ Wrong password or invalid Master Key.</div>
+    <div id="adminLoginError" style="display:none;color:#ff6666;font-size:13px;margin-bottom:14px;padding:8px 12px;background:rgba(255,0,0,0.08);border-radius:6px;border:1px solid rgba(255,0,0,0.15);">❌ Wrong password.</div>
     <button onclick="doAdminLogin()" id="adminLoginSubmit" style="width:100%;padding:12px;background:linear-gradient(135deg,#6C63FF,#9B5DFF);border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .2s;">Login to Admin Panel →</button>
   </div>
 </div>
@@ -2155,48 +2157,6 @@ footer {
   </div>
 </div>
 
-<!-- PRICING EDIT MODAL -->
-<div class="pricing-edit-modal" id="pricingEditModal">
-  <div class="pricing-edit-inner">
-    <h3 id="pricingEditTitle">✏ Edit Plan</h3>
-    <input type="hidden" id="pricingEditIndex">
-
-    <div class="pef-row">
-      <div class="pef-label">PLAN NAME</div>
-      <input class="pef-input" id="pef_plan" placeholder="e.g. Starter, Creator, Pro...">
-    </div>
-    <div class="pef-row">
-      <div class="pef-label">PRICE (number or text like "Custom")</div>
-      <input class="pef-input" id="pef_price" placeholder="e.g. 99 or Custom">
-    </div>
-    <div class="pef-row">
-      <div class="pef-label">CURRENCY SYMBOL</div>
-      <input class="pef-input" id="pef_currency" placeholder="e.g. $" style="max-width:80px;">
-    </div>
-    <div class="pef-row">
-      <div class="pef-label">DESCRIPTION</div>
-      <textarea class="pef-textarea" id="pef_desc" placeholder="Short plan description..."></textarea>
-    </div>
-    <div class="pef-row">
-      <div class="pef-label">CTA BUTTON TEXT</div>
-      <input class="pef-input" id="pef_cta" placeholder="e.g. Get Started, Let's Talk...">
-    </div>
-    <div class="pef-row">
-      <div class="pef-label">POPULAR BADGE (leave empty to hide)</div>
-      <input class="pef-input" id="pef_badge" placeholder="e.g. Most Popular">
-    </div>
-
-    <div class="pef-section-title">// FEATURES (check = available, uncheck = unavailable)</div>
-    <div id="pef_features_list"></div>
-    <button class="pef-add-feat-btn" onclick="addPricingFeature()">+ Add Feature</button>
-
-    <div style="display:flex;gap:10px;margin-top:20px;">
-      <button onclick="savePricingEdit()" style="flex:1;padding:12px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;">Save Changes →</button>
-      <button onclick="closePricingEdit()" style="padding:12px 18px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;font-family:var(--font-display);font-size:14px;cursor:pointer;">Cancel</button>
-    </div>
-  </div>
-</div>
-
 <!-- CLIENT CUSTOM PRICING MODAL -->
 <div class="pricing-edit-modal" id="clientPricingModal">
   <div class="pricing-edit-inner">
@@ -2392,6 +2352,21 @@ footer {
         </div>
         <span class="fiv-custom-arrow">→</span>
       </a>
+    </div>
+
+    <!-- CLIENT CUSTOM PRICING -->
+    <div id="clientPricingSection" class="client-pricing-wrap">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin:56px 0 24px;">
+        <div>
+          <div class="section-label" style="margin-bottom:6px;">// SPECIAL DEALS</div>
+          <div style="font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--white);">Custom Pricing For You</div>
+        </div>
+        <button class="admin-only" style="display:none;align-items:center;gap:8px;padding:10px 20px;background:linear-gradient(135deg,var(--cyan),var(--indigo));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:13px;font-weight:700;cursor:pointer;" onclick="openClientPricingModal()">＋ Add Custom Deal</button>
+      </div>
+      <div class="client-pricing-grid" id="clientPricingGrid"></div>
+      <div id="clientPricingEmpty" style="display:none;text-align:center;padding:40px 24px;border:2px dashed var(--border);border-radius:16px;color:var(--muted);font-size:13px;">
+        No custom deals yet. Admin can add a special client-specific offer here.
+      </div>
     </div>
   </div>
 </section>
@@ -2959,18 +2934,34 @@ if (heroStats) statObs.observe(heroStats);
 const avatarInput = document.getElementById('avatarInput');
 const avatarImg = document.getElementById('avatarImg');
 const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+const proPhotoInput = document.getElementById('proPhotoInput');
+const proPhotoImg = document.getElementById('proPhotoImg');
+const proPhotoPlaceholder = document.getElementById('proPhotoPlaceholder');
 
-// Load saved avatar on page load
-(function() {
-  const saved = localStorage.getItem('vapx_avatar');
-  if (saved) {
-    avatarImg.src = saved;
-    avatarImg.style.display = 'block';
-    avatarPlaceholder.style.display = 'none';
-  }
-})();
+// ছোট করে compress করে base64 বানায় (cloud-এ ছোট রাখার জন্য)
+function compressImageFile(file, maxDim, quality) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if (w > h && w > maxDim) { h = Math.round(h * maxDim / w); w = maxDim; }
+        else if (h > maxDim) { w = Math.round(w * maxDim / h); h = maxDim; }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
 
-// Admin হলে avatar upload enable করো
+// Admin হলে avatar + pro photo দুটোই upload enable হবে
 function updateAvatarUploadAccess() {
   const label = document.getElementById('avatarUploadLabel');
   if (!label) return;
@@ -2986,36 +2977,6 @@ function updateAvatarUploadAccess() {
   updateProPhotoAccess();
 }
 
-avatarInput.addEventListener('change', function() {
-  if (!isAdmin) return;
-  const file = this.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    avatarImg.src = e.target.result;
-    avatarImg.style.display = 'block';
-    avatarPlaceholder.style.display = 'none';
-    try { localStorage.setItem('vapx_avatar', e.target.result); } catch(err) { console.warn('Avatar too large for localStorage'); }
-  };
-  reader.readAsDataURL(file);
-});
-
-// ===== PROFESSIONAL PHOTO UPLOAD =====
-const proPhotoInput = document.getElementById('proPhotoInput');
-const proPhotoImg = document.getElementById('proPhotoImg');
-const proPhotoPlaceholder = document.getElementById('proPhotoPlaceholder');
-
-// Load saved pro photo
-(function() {
-  const saved = localStorage.getItem('vapx_pro_photo');
-  if (saved) {
-    proPhotoImg.src = saved;
-    proPhotoImg.style.display = 'block';
-    proPhotoPlaceholder.style.display = 'none';
-  }
-})();
-
-// Admin হলে pro photo upload enable
 function updateProPhotoAccess() {
   const label = document.getElementById('proPhotoPlaceholder');
   if (!label) return;
@@ -3028,63 +2989,96 @@ function updateProPhotoAccess() {
   }
 }
 
-proPhotoInput.addEventListener('change', function() {
+// cloud থেকে avatar/pro-photo load করে দেখায় (সব device-এ same দেখাবে)
+function renderProfileImages() {
+  const av = _record['avatar_img'];
+  if (av) {
+    avatarImg.src = av;
+    avatarImg.style.display = 'block';
+    avatarPlaceholder.style.display = 'none';
+  } else {
+    avatarImg.style.display = 'none';
+    avatarPlaceholder.style.display = 'flex';
+  }
+  const pp = _record['pro_photo_img'];
+  if (pp) {
+    proPhotoImg.src = pp;
+    proPhotoImg.style.display = 'block';
+    proPhotoPlaceholder.style.display = 'none';
+  } else {
+    proPhotoImg.style.display = 'none';
+    proPhotoPlaceholder.style.display = 'flex';
+  }
+}
+
+avatarInput.addEventListener('change', async function() {
   if (!isAdmin) return;
   const file = this.files[0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    proPhotoImg.src = e.target.result;
+  const label = document.getElementById('avatarUploadLabel');
+  const overlay = label.querySelector('.avatar-overlay-txt');
+  if (overlay) overlay.textContent = 'Uploading...';
+  try {
+    const compressed = await compressImageFile(file, 500, 0.82);
+    avatarImg.src = compressed;
+    avatarImg.style.display = 'block';
+    avatarPlaceholder.style.display = 'none';
+    await sharedSet('avatar_img', compressed);
+  } catch (err) {
+    console.error('Avatar upload failed', err);
+    alert('Avatar upload failed. Try a smaller image.');
+  }
+  if (overlay) overlay.textContent = 'Upload Photo';
+});
+
+proPhotoInput.addEventListener('change', async function() {
+  if (!isAdmin) return;
+  const file = this.files[0];
+  if (!file) return;
+  const placeholder = document.getElementById('proPhotoPlaceholder');
+  const origHtml = placeholder.innerHTML;
+  placeholder.innerHTML = '<span style="font-size:12px;">Uploading...</span>';
+  try {
+    const compressed = await compressImageFile(file, 600, 0.82);
+    proPhotoImg.src = compressed;
     proPhotoImg.style.display = 'block';
-    proPhotoPlaceholder.style.display = 'none';
-    try { localStorage.setItem('vapx_pro_photo', e.target.result); } catch(err) { console.warn('Pro photo too large for localStorage'); }
-  };
-  reader.readAsDataURL(file);
+    placeholder.style.display = 'none';
+    await sharedSet('pro_photo_img', compressed);
+  } catch (err) {
+    console.error('Pro photo upload failed', err);
+    alert('Photo upload failed. Try a smaller image.');
+    placeholder.innerHTML = origHtml;
+  }
 });
 
 // ===================================================
-// JSONBIN CONFIG
+// FIREBASE REALTIME DATABASE CONFIG
 // ===================================================
-const JSONBIN_READ_KEY  = '$2a$10$Rqfp0YIynu120n.kUAYFQORJDEMgl8nE33D5kj4buZBFouY5UMl6a';
-const JSONBIN_BIN_ID_KEY = 'vapx_jsonbin_id'; // bin ID localStorage-এ cache হবে
-const JSONBIN_BIN_ID_FIXED = '6a41fbeef5f4af5e293fa8a5'; // hardcoded — সব device-এ কাজ করবে
-let _masterKey = null; // শুধু admin login-এর পর memory-তে থাকবে
+let _masterKey = null; // admin login-এর পর memory-তে থাকবে (password gate হিসেবে ব্যবহৃত)
 
-// JSONBin bin তৈরি বা load করা
-async function getOrCreateBin() {
-  // Hardcoded bin ID — সব device থেকে same data load হবে
-  localStorage.setItem(JSONBIN_BIN_ID_KEY, JSONBIN_BIN_ID_FIXED);
-  return JSONBIN_BIN_ID_FIXED;
+// সব data এই একটাই path-এ থাকবে (JSONBin _record-এর সমতুল্য)
+const FB_ROOT_PATH = 'site_data';
+
+async function fbWaitReady() {
+  if (window._fbReady) return;
+  await new Promise(resolve => window.addEventListener('firebase-ready', resolve, { once: true }));
 }
 
 async function cloudGet() {
-  const binId = JSONBIN_BIN_ID_FIXED;
-  // Private bin — Master Key দিয়ে read করতে হবে
-  // Master Key না থাকলে Access Key দিয়ে try করো
-  const key = _masterKey || JSONBIN_READ_KEY;
-  const headerKey = _masterKey ? 'X-Master-Key' : 'X-Access-Key';
   try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
-      headers: { [headerKey]: key }
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    return data.record || null;
+    await fbWaitReady();
+    const { ref, get, db } = window._fb;
+    const snap = await get(ref(db, FB_ROOT_PATH));
+    return snap.exists() ? snap.val() : null;
   } catch(e) { console.error('Cloud read failed:', e); return null; }
 }
 
 async function cloudSet(record) {
-  const binId = await getOrCreateBin();
-  if (!binId || !_masterKey) return false;
+  if (!_masterKey) return false; // শুধু admin login করলেই write হবে
   try {
-    await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': _masterKey
-      },
-      body: JSON.stringify(record)
-    });
+    await fbWaitReady();
+    const { ref, set, db } = window._fb;
+    await set(ref(db, FB_ROOT_PATH), record);
     return true;
   } catch(e) { console.error('Cloud write failed:', e); return false; }
 }
@@ -3106,12 +3100,9 @@ let isAdmin = false;
 function checkAdmin() {
   const stored = sessionStorage.getItem('vapx_admin_ok');
   if (stored === '1') {
-    const mk = sessionStorage.getItem('vapx_mk');
-    if (mk) {
-      _masterKey = atob(mk);
-      isAdmin = true;
-      showAdminUI();
-    }
+    _masterKey = 'firebase-admin';
+    isAdmin = true;
+    showAdminUI();
   } else if (_isLoginRoute) {
     // Secret URL-এ এসেছে — login button দেখাও
     const btn = document.getElementById('adminLoginBtn');
@@ -3124,7 +3115,6 @@ function openAdminLoginModal() {
   const modal = document.getElementById('adminLoginModal');
   modal.style.display = 'flex';
   document.getElementById('adminPassInput').value = '';
-  document.getElementById('adminMkInput').value = '';
   document.getElementById('adminLoginError').style.display = 'none';
   setTimeout(() => document.getElementById('adminPassInput').focus(), 100);
 }
@@ -3138,7 +3128,6 @@ document.getElementById('adminLoginModal').addEventListener('click', function(e)
 
 async function doAdminLogin() {
   const pass = document.getElementById('adminPassInput').value.trim();
-  const mk   = document.getElementById('adminMkInput').value.trim();
   const errEl = document.getElementById('adminLoginError');
   const btn   = document.getElementById('adminLoginSubmit');
 
@@ -3148,39 +3137,19 @@ async function doAdminLogin() {
     errEl.style.display = 'block';
     return;
   }
-  if (!mk || !mk.startsWith('$2a$')) {
-    errEl.textContent = '❌ Invalid Master Key format! Should start with $2a$';
-    errEl.style.display = 'block';
-    return;
-  }
 
   btn.textContent = 'Connecting...';
   btn.disabled = true;
 
-  _masterKey = mk;
+  _masterKey = 'firebase-admin'; // write-permission gate হিসেবে ব্যবহৃত (password-ই আসল security)
   sessionStorage.setItem('vapx_admin_ok', '1');
-  sessionStorage.setItem('vapx_mk', btoa(mk));
   isAdmin = true;
-
-  const binId = await getOrCreateBin();
-  if (!binId) {
-    errEl.textContent = '❌ Failed to connect to JSONBin. Check your Master Key.';
-    errEl.style.display = 'block';
-    btn.textContent = 'Login to Admin Panel →';
-    btn.disabled = false;
-    _masterKey = null;
-    sessionStorage.removeItem('vapx_admin_ok');
-    sessionStorage.removeItem('vapx_mk');
-    isAdmin = false;
-    return;
-  }
 
   closeAdminLoginModal();
   showAdminUI();
   renderYtVideos();
   renderBlog();
   renderProjects();
-  renderPricingGrid();
   renderClientPricing();
   fivRenderTabs();
   fivRenderCard();
@@ -3195,14 +3164,12 @@ async function doAdminLogin() {
 
 function adminLogout() {
   sessionStorage.removeItem('vapx_admin_ok');
-  sessionStorage.removeItem('vapx_mk');
   _masterKey = null;
   isAdmin = false;
   hideAdminUI();
   renderYtVideos();
   renderBlog();
   renderProjects();
-  renderPricingGrid();
   renderClientPricing();
   fivRenderTabs();
   fivRenderCard();
@@ -3670,106 +3637,9 @@ function clearProjectMedia() {
 }
 
 // ===================================================
-// PRICING SYSTEM — Admin editable
+// CLIENT CUSTOM PRICING — Admin can add special deals
 // ===================================================
-let pricingPlans = [
-  { plan:'Starter', price:'99', currency:'$', desc:'Perfect for a single deliverable — a logo, a thumbnail set, or a prompt pack.', cta:'Get Started', badge:'', featured:false,
-    features:[{text:'1 design or content deliverable',available:true},{text:'Up to 10 AI-generated visuals',available:true},{text:'2 revision rounds',available:true},{text:'3-day delivery',available:true},{text:'AI automation setup',available:false},{text:'Priority support',available:false}] },
-  { plan:'Creator', price:'349', currency:'$', desc:'For creators and small brands who need ongoing content, design, or video.', cta:'Get Started', badge:'Most Popular', featured:true,
-    features:[{text:'Full brand kit or 1-month content batch',available:true},{text:'1 video edit (up to 5 min)',available:true},{text:'AI voiceover or music add-on',available:true},{text:'3 revision rounds',available:true},{text:'5-day delivery',available:true},{text:'Priority support',available:true}] },
-  { plan:'Automation Pro', price:'Custom', currency:'', desc:'For businesses that want a full AI-powered content & automation system.', cta:"Let's Talk", badge:'', featured:false,
-    features:[{text:'Everything in Creator',available:true},{text:'Custom AI automation workflow',available:true},{text:'Ongoing monthly content pipeline',available:true},{text:'24–48hr priority turnaround',available:true},{text:'Monthly retainer available',available:true}] }
-];
 let clientPricings = [];
-
-function renderPricingGrid() {
-  const grid = document.getElementById('pricingGrid');
-  if (!grid) return;
-  const checkIcon = (color) => `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`;
-  const crossIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
-  grid.innerHTML = pricingPlans.map((p, i) => {
-    const fColor = p.featured ? 'var(--indigo)' : '#1AB65D';
-    const priceHtml = isNaN(parseFloat(p.price))
-      ? `<div class="pricing-price">${p.price}</div>`
-      : `<div class="pricing-price"><span class="price-currency">${p.currency}</span>${p.price}</div>`;
-    const featuresHtml = p.features.map(f => `
-      <li class="${f.available?'':'unavailable'}">${f.available ? checkIcon(fColor) : crossIcon}${f.text}</li>`).join('');
-    const ctaBtn = p.featured
-      ? `<a href="#contact" class="btn-primary pricing-cta"><span>${p.cta}</span></a>`
-      : `<a href="#contact" class="btn-ghost pricing-cta">${p.cta}</a>`;
-    return `<div class="pricing-card ${p.featured?'pricing-card-featured':''} reveal">
-      ${p.badge ? `<div class="pricing-popular">${p.badge}</div>` : ''}
-      <div class="pricing-plan">${p.plan}</div>
-      ${priceHtml}
-      <div class="pricing-desc">${p.desc}</div>
-      <ul class="pricing-features">${featuresHtml}</ul>
-      ${ctaBtn}
-      <button class="pricing-admin-btn admin-only" style="display:${isAdmin?'inline-flex':'none'};" onclick="openPricingEdit(${i})">✏ Edit Plan</button>
-    </div>`;
-  }).join('');
-}
-
-function openPricingEdit(idx) {
-  if (!isAdmin) return;
-  const p = pricingPlans[idx];
-  document.getElementById('pricingEditIndex').value = idx;
-  document.getElementById('pricingEditTitle').textContent = `✏ Edit — ${p.plan}`;
-  document.getElementById('pef_plan').value = p.plan;
-  document.getElementById('pef_price').value = p.price;
-  document.getElementById('pef_currency').value = p.currency;
-  document.getElementById('pef_desc').value = p.desc;
-  document.getElementById('pef_cta').value = p.cta;
-  document.getElementById('pef_badge').value = p.badge || '';
-  // Render features
-  const fl = document.getElementById('pef_features_list');
-  fl.innerHTML = p.features.map((f,fi) => `
-    <div class="pef-feature-row" id="pef_fr_${fi}">
-      <input type="checkbox" class="pef-feature-check" id="pef_fc_${fi}" ${f.available?'checked':''}>
-      <input type="text" value="${f.text}" id="pef_ft_${fi}" placeholder="Feature text...">
-      <button onclick="removePricingFeature(${fi})" style="background:rgba(255,50,50,0.1);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:6px;padding:5px 9px;cursor:pointer;font-size:12px;">✕</button>
-    </div>`).join('');
-  document.getElementById('pricingEditModal').classList.add('open');
-}
-
-function closePricingEdit() { document.getElementById('pricingEditModal').classList.remove('open'); }
-
-function addPricingFeature() {
-  const fl = document.getElementById('pef_features_list');
-  const idx = fl.children.length;
-  const row = document.createElement('div');
-  row.className = 'pef-feature-row'; row.id = `pef_fr_${idx}`;
-  row.innerHTML = `<input type="checkbox" class="pef-feature-check" id="pef_fc_${idx}" checked><input type="text" id="pef_ft_${idx}" placeholder="New feature..."><button onclick="removePricingFeature(${idx})" style="background:rgba(255,50,50,0.1);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:6px;padding:5px 9px;cursor:pointer;font-size:12px;">✕</button>`;
-  fl.appendChild(row);
-}
-
-function removePricingFeature(fi) {
-  const row = document.getElementById(`pef_fr_${fi}`);
-  if (row) row.remove();
-}
-
-async function savePricingEdit() {
-  const idx = parseInt(document.getElementById('pricingEditIndex').value);
-  const fl = document.getElementById('pef_features_list');
-  const features = [];
-  fl.querySelectorAll('.pef-feature-row').forEach((row) => {
-    const check = row.querySelector('input[type=checkbox]');
-    const text  = row.querySelector('input[type=text]');
-    if (text && text.value.trim()) features.push({ text: text.value.trim(), available: check ? check.checked : true });
-  });
-  pricingPlans[idx] = {
-    ...pricingPlans[idx],
-    plan:     document.getElementById('pef_plan').value.trim() || pricingPlans[idx].plan,
-    price:    document.getElementById('pef_price').value.trim(),
-    currency: document.getElementById('pef_currency').value.trim(),
-    desc:     document.getElementById('pef_desc').value.trim(),
-    cta:      document.getElementById('pef_cta').value.trim() || 'Get Started',
-    badge:    document.getElementById('pef_badge').value.trim(),
-    features,
-  };
-  await sharedSet('pricing_plans', pricingPlans);
-  closePricingEdit();
-  renderPricingGrid();
-}
 
 // ===== Client Custom Pricing =====
 function renderClientPricing() {
@@ -3779,6 +3649,8 @@ function renderClientPricing() {
   if (!grid || !empty || !section) return;
   if (clientPricings.length || isAdmin) {
     section.classList.add('visible');
+  } else {
+    section.classList.remove('visible');
   }
   if (!clientPricings.length) {
     grid.innerHTML = '';
@@ -3827,8 +3699,7 @@ async function removeClientPricing(i) {
   renderClientPricing();
 }
 
-// Close pricing modals on backdrop click
-document.getElementById('pricingEditModal').addEventListener('click', e => { if (e.target === e.currentTarget) closePricingEdit(); });
+// Close client pricing modal on backdrop click
 document.getElementById('clientPricingModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeClientPricingModal(); });
 
 // ===================================================
@@ -4002,7 +3873,6 @@ async function initSharedData() {
     if (record.yt_channel)     ytChannel      = record.yt_channel;
     if (record.blog_posts)     blogPosts      = record.blog_posts;
     if (record.projects)       projects       = record.projects;
-    if (record.pricing_plans)  pricingPlans   = record.pricing_plans;
     if (record.client_pricings) clientPricings = record.client_pricings;
     if (record.fiv_plans)      fivPlans        = record.fiv_plans;
   }
@@ -4011,10 +3881,10 @@ async function initSharedData() {
   renderYtVideos();
   renderBlog();
   renderProjects();
-  renderPricingGrid();
   renderClientPricing();
   fivRenderTabs();
   fivRenderCard();
+  renderProfileImages();
 }
 
 // ===== MARQUEE — JS controlled (PC slow, mobile fast) =====
