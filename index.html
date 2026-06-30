@@ -1676,11 +1676,186 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* ===== NEW FEATURE: LIGHT MODE OVERRIDES ===== */
+body.light-mode {
+  --bg: #F5F6FA;
+  --bg2: #FFFFFF;
+  --card: #FFFFFF;
+  --card2: #F0F1F7;
+  --border: rgba(108,99,255,0.18);
+  --border2: rgba(0,150,200,0.15);
+  --white: #11131A;
+  --muted: #555B70;
+}
+body.light-mode::before { background-image: radial-gradient(rgba(108,99,255,0.06) 1px, transparent 1px); }
+body.light-mode nav.scrolled { background: rgba(245,246,250,0.92); }
+body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
+
+/* ===== NEW FEATURE: THEME TOGGLE BUTTON ===== */
+.theme-toggle-btn {
+  position: fixed;
+  top: 18px;
+  right: 24px;
+  z-index: 1100;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(13,17,32,0.6);
+  border: 1px solid var(--border);
+  color: var(--white);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  transition: all .25s;
+}
+.theme-toggle-btn:hover { border-color: var(--indigo); box-shadow: var(--glow-i); }
+@media (max-width: 900px) {
+  .theme-toggle-btn { top: 14px; right: 64px; width: 34px; height: 34px; font-size: 14px; }
+}
+
+/* ===== NEW FEATURE: WHATSAPP FLOATING BUTTON ===== */
+.wa-float-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 950;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #25D366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 22px rgba(37,211,102,0.45);
+  transition: transform .25s, box-shadow .25s;
+  animation: waPulse 2.4s infinite;
+}
+.wa-float-btn:hover { transform: scale(1.08); box-shadow: 0 8px 28px rgba(37,211,102,0.6); }
+.wa-float-btn svg { width: 30px; height: 30px; }
+@keyframes waPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(37,211,102,0.45); }
+  70%  { box-shadow: 0 0 0 14px rgba(37,211,102,0); }
+  100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
+}
+@media (max-width: 600px) {
+  .wa-float-btn { width: 50px; height: 50px; bottom: 18px; right: 18px; }
+  .wa-float-btn svg { width: 26px; height: 26px; }
+}
+
+/* ===== NEW FEATURE: EXIT-INTENT POPUP ===== */
+.exit-popup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.exit-popup-overlay.show { display: flex; }
+.exit-popup-box {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  background: linear-gradient(160deg, var(--card), var(--card2));
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 36px 30px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), var(--glow-i);
+  animation: exitPopIn .35s ease;
+}
+@keyframes exitPopIn {
+  from { opacity: 0; transform: scale(.92) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.exit-popup-close {
+  position: absolute;
+  top: 12px; right: 14px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+}
+.exit-popup-close:hover { color: var(--white); }
+.exit-popup-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--cyan);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.exit-popup-title {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: var(--white);
+}
+.exit-popup-title span {
+  background: linear-gradient(90deg, var(--indigo), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.exit-popup-text {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+.exit-popup-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 20px;
+  background: #25D366;
+  color: #fff;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all .25s;
+}
+.exit-popup-cta:hover { background: #1ebd5a; box-shadow: 0 6px 20px rgba(37,211,102,0.4); }
+.exit-popup-cta svg { width: 20px; height: 20px; }
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>emailjs.init('e0awi-tK6bi_VJHzU');</script>
 </head>
 <body>
+
+<!-- ===== NEW FEATURE: DARK/LIGHT MODE TOGGLE (corner, header) ===== -->
+<button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeMode()" aria-label="Toggle dark/light mode" title="Toggle dark/light mode">🌙</button>
+
+<!-- ===== NEW FEATURE: WHATSAPP FLOATING BUTTON (bottom-right) ===== -->
+<a class="wa-float-btn" href="https://wa.me/8801521731046" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" title="Chat on WhatsApp">
+  <svg viewBox="0 0 32 32" fill="#fff"><path d="M16.001 3C9.107 3 3.5 8.607 3.5 15.5c0 2.43.683 4.7 1.866 6.633L3 29l7.05-2.317A12.43 12.43 0 0 0 16.001 28C22.894 28 28.5 22.394 28.5 15.5S22.894 3 16.001 3zm0 22.65a10.1 10.1 0 0 1-5.16-1.413l-.37-.22-4.186 1.376 1.394-4.08-.24-.39A10.1 10.1 0 0 1 5.85 15.5c0-5.6 4.55-10.15 10.151-10.15S26.15 9.9 26.15 15.5 21.602 25.65 16.001 25.65zm5.55-7.59c-.304-.152-1.795-.886-2.073-.987-.278-.102-.48-.152-.683.152-.202.305-.78.987-.957 1.19-.176.203-.353.228-.657.076-.304-.152-1.284-.473-2.446-1.51-.904-.806-1.514-1.802-1.692-2.106-.177-.305-.019-.47.133-.622.137-.136.304-.354.456-.532.152-.177.202-.304.304-.507.101-.203.05-.38-.025-.532-.076-.152-.683-1.646-.936-2.255-.247-.593-.498-.513-.683-.522l-.583-.01c-.202 0-.531.076-.81.38-.278.305-1.06 1.036-1.06 2.528 0 1.492 1.085 2.934 1.236 3.137.151.203 2.135 3.26 5.173 4.572.723.312 1.287.499 1.727.638.726.231 1.387.198 1.91.12.583-.087 1.795-.734 2.048-1.443.253-.71.253-1.317.177-1.444-.076-.126-.278-.202-.582-.354z"/></svg>
+</a>
+
+<!-- ===== NEW FEATURE: EXIT-INTENT POPUP ===== -->
+<div class="exit-popup-overlay" id="exitPopupOverlay">
+  <div class="exit-popup-box">
+    <button class="exit-popup-close" onclick="closeExitPopup()" aria-label="Close">✕</button>
+    <div class="exit-popup-badge">// Wait, don't go</div>
+    <div class="exit-popup-title">Wait! Don't miss out!<br>Get <span>10% off</span> your first project.</div>
+    <div class="exit-popup-text">Message me on WhatsApp right now and claim your exclusive 10% discount before you leave.</div>
+    <a class="exit-popup-cta" href="https://wa.me/8801521731046?text=Hi%2C%20I%27d%20like%20to%20claim%20my%2010%25%20discount!" target="_blank" rel="noopener" onclick="closeExitPopup()">
+      <svg viewBox="0 0 32 32" fill="#fff"><path d="M16.001 3C9.107 3 3.5 8.607 3.5 15.5c0 2.43.683 4.7 1.866 6.633L3 29l7.05-2.317A12.43 12.43 0 0 0 16.001 28C22.894 28 28.5 22.394 28.5 15.5S22.894 3 16.001 3zm0 22.65a10.1 10.1 0 0 1-5.16-1.413l-.37-.22-4.186 1.376 1.394-4.08-.24-.39A10.1 10.1 0 0 1 5.85 15.5c0-5.6 4.55-10.15 10.151-10.15S26.15 9.9 26.15 15.5 21.602 25.65 16.001 25.65z"/></svg>
+      Claim 10% Discount on WhatsApp
+    </a>
+  </div>
+</div>
 
 <!-- ===== ADMIN BAR ===== -->
 <div id="adminBar" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,rgba(108,99,255,0.95),rgba(155,93,255,0.95));backdrop-filter:blur(12px);padding:10px 24px;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid rgba(255,255,255,0.15);font-family:'Inter',sans-serif;">
@@ -4148,6 +4323,52 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   });
+
+// ===================================================
+// NEW FEATURE: DARK / LIGHT MODE TOGGLE
+// ===================================================
+(function() {
+  const btn = document.getElementById('themeToggleBtn');
+  const saved = localStorage.getItem('themeMode');
+  if (saved === 'light') {
+    document.body.classList.add('light-mode');
+    if (btn) btn.textContent = '☀️';
+  }
+})();
+function toggleThemeMode() {
+  const isLight = document.body.classList.toggle('light-mode');
+  document.getElementById('themeToggleBtn').textContent = isLight ? '☀️' : '🌙';
+  localStorage.setItem('themeMode', isLight ? 'light' : 'dark');
+}
+
+// ===================================================
+// NEW FEATURE: EXIT-INTENT POPUP (desktop mouseleave + mobile fallback)
+// ===================================================
+(function() {
+  let exitShown = false;
+  function showExitPopup() {
+    if (exitShown) return;
+    if (sessionStorage.getItem('exitPopupShown')) return;
+    exitShown = true;
+    sessionStorage.setItem('exitPopupShown', '1');
+    document.getElementById('exitPopupOverlay').classList.add('show');
+  }
+  document.addEventListener('mouseout', function(e) {
+    if (!e.relatedTarget && !e.toElement && e.clientY < 10) {
+      showExitPopup();
+    }
+  });
+  // Mobile fallback: trigger after a delay of inactivity / back button intent
+  let mobileTimer = setTimeout(() => {}, 0);
+  window.addEventListener('blur', function() {
+    if (window.innerWidth <= 768) showExitPopup();
+  });
+})();
+function closeExitPopup() {
+  document.getElementById('exitPopupOverlay').classList.remove('show');
+}
+document.getElementById('exitPopupOverlay').addEventListener('click', function(e) {
+  if (e.target === e.currentTarget) closeExitPopup();
 });
 </script>
 </body>
