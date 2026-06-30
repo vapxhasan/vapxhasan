@@ -1613,7 +1613,7 @@ footer {
 /* ===== BACK TO TOP ===== */
 #btt {
   position: fixed;
-  bottom: 28px; right: 28px;
+  bottom: 100px; right: 28px;
   width: 44px; height: 44px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--indigo), var(--violet));
@@ -1630,6 +1630,9 @@ footer {
 }
 #btt.show { opacity: 1; transform: translateY(0); }
 #btt:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(108,99,255,0.6); }
+@media (max-width: 600px) {
+  #btt { bottom: 82px; right: 18px; width: 40px; height: 40px; font-size: 16px; }
+}
 
 /* ===== CURSOR GLOW ===== */
 .cursor-glow {
