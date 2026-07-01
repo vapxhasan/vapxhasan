@@ -2076,6 +2076,14 @@ footer {
   justify-content: center;
   font-size: 26px;
   flex-shrink: 0;
+  background: rgba(255,255,255,0.96) !important;
+  padding: 9px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+.tool-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 .tool-name {
   font-size: 12px;
@@ -2086,7 +2094,7 @@ footer {
 @media (max-width: 600px) {
   .tools-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
   .tool-card { padding: 16px 10px 12px; }
-  .tool-icon { width: 40px; height: 40px; font-size: 22px; }
+  .tool-icon { width: 40px; height: 40px; font-size: 22px; padding: 7px; }
   .tool-name { font-size: 11px; }
 }
 
@@ -2703,27 +2711,27 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
         <div class="tools-category-title">// AI Tools</div>
         <div class="tools-grid">
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#10a37f22,#10a37f44)">🤖</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=chatgpt.com&sz=128" alt="ChatGPT logo" loading="lazy"></div>
             <div class="tool-name">ChatGPT</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#6c63ff22,#6c63ff44)">🧠</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=claude.ai&sz=128" alt="Claude AI logo" loading="lazy"></div>
             <div class="tool-name">Claude AI</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#e55b4d22,#e55b4d44)">🎨</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=midjourney.com&sz=128" alt="Midjourney logo" loading="lazy"></div>
             <div class="tool-name">Midjourney</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#00b4d822,#00b4d844)">🖼️</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=openai.com&sz=128" alt="DALL·E logo" loading="lazy"></div>
             <div class="tool-name">DALL·E</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#ff6b3522,#ff6b3544)">✍️</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=gemini.google.com&sz=128" alt="Gemini logo" loading="lazy"></div>
             <div class="tool-name">Gemini</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#9b59b622,#9b59b644)">🔮</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=grok.com&sz=128" alt="Grok logo" loading="lazy"></div>
             <div class="tool-name">Grok</div>
           </div>
           <div class="tool-card">
@@ -2738,35 +2746,35 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
         <div class="tools-category-title">// AI Image & Video</div>
         <div class="tools-grid">
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#10a37f22,#10a37f44)">🤖</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=chatgpt.com&sz=128" alt="ChatGPT logo" loading="lazy"></div>
             <div class="tool-name">ChatGPT</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#ff6eb422,#ff6eb444)">🌸</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=dreamina.capcut.com&sz=128" alt="Dreamina AI logo" loading="lazy"></div>
             <div class="tool-name">Dreamina AI</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#ff405022,#ff405044)">🎬</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=runwayml.com&sz=128" alt="Runway ML logo" loading="lazy"></div>
             <div class="tool-name">Runway ML</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#0ea5e922,#0ea5e944)">🌊</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=klingai.com&sz=128" alt="Kling AI logo" loading="lazy"></div>
             <div class="tool-name">Kling AI</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#22c55e22,#22c55e44)">🎥</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=heygen.com&sz=128" alt="HeyGen logo" loading="lazy"></div>
             <div class="tool-name">HeyGen</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#f59e0b22,#f59e0b44)">⚡</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=stability.ai&sz=128" alt="Stable Diffusion logo" loading="lazy"></div>
             <div class="tool-name">Stable Diffusion</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#8b5cf622,#8b5cf644)">🎞️</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=pika.art&sz=128" alt="Pika Labs logo" loading="lazy"></div>
             <div class="tool-name">Pika Labs</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#ec489922,#ec489944)">✨</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=firefly.adobe.com&sz=128" alt="Adobe Firefly logo" loading="lazy"></div>
             <div class="tool-name">Adobe Firefly</div>
           </div>
         </div>
@@ -2777,23 +2785,23 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
         <div class="tools-category-title">// AI Audio</div>
         <div class="tools-grid">
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#f97316 22,#f9731644)">🎙️</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=elevenlabs.io&sz=128" alt="ElevenLabs logo" loading="lazy"></div>
             <div class="tool-name">ElevenLabs</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#06b6d422,#06b6d444)">🎵</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=suno.com&sz=128" alt="Suno AI logo" loading="lazy"></div>
             <div class="tool-name">Suno AI</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#a78bfa22,#a78bfa44)">🎶</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=udio.com&sz=128" alt="Udio logo" loading="lazy"></div>
             <div class="tool-name">Udio</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#34d39922,#34d39944)">🔊</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=murf.ai&sz=128" alt="Murf AI logo" loading="lazy"></div>
             <div class="tool-name">Murf AI</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#4285f422,#4285f444)">🎤</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=aistudio.google.com&sz=128" alt="Google AI Studio logo" loading="lazy"></div>
             <div class="tool-name">Google AI Studio</div>
           </div>
         </div>
@@ -2804,19 +2812,19 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
         <div class="tools-category-title">// Design</div>
         <div class="tools-grid">
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#00c4cc22,#00c4cc44)">🖌️</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=canva.com&sz=128" alt="Canva logo" loading="lazy"></div>
             <div class="tool-name">Canva</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#31a8ff22,#31a8ff44)">📸</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=adobe.com&sz=128" alt="Photoshop logo" loading="lazy"></div>
             <div class="tool-name">Photoshop</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#ff9a0022,#ff9a0044)">🎭</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=adobe.com&sz=128" alt="Illustrator logo" loading="lazy"></div>
             <div class="tool-name">Illustrator</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#f24e1e22,#f24e1e44)">🖼️</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=figma.com&sz=128" alt="Figma logo" loading="lazy"></div>
             <div class="tool-name">Figma</div>
           </div>
         </div>
@@ -2827,19 +2835,19 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
         <div class="tools-category-title">// Video Editing</div>
         <div class="tools-grid">
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#9999ff22,#9999ff44)">🎬</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=adobe.com&sz=128" alt="Premiere Pro logo" loading="lazy"></div>
             <div class="tool-name">Premiere Pro</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#ff6b0022,#ff6b0044)">✂️</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=capcut.com&sz=128" alt="CapCut logo" loading="lazy"></div>
             <div class="tool-name">CapCut</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#ff8c0022,#ff8c0044)">🎞️</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=blackmagicdesign.com&sz=128" alt="DaVinci Resolve logo" loading="lazy"></div>
             <div class="tool-name">DaVinci Resolve</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#0066ff22,#0066ff44)">🎥</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=adobe.com&sz=128" alt="After Effects logo" loading="lazy"></div>
             <div class="tool-name">After Effects</div>
           </div>
         </div>
@@ -2850,31 +2858,31 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
         <div class="tools-category-title">// Automation & Marketing</div>
         <div class="tools-grid">
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#ea4b7122,#ea4b7144)">🔴</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=n8n.io&sz=128" alt="n8n logo" loading="lazy"></div>
             <div class="tool-name">n8n</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#ff620022,#ff620044)">⚙️</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=make.com&sz=128" alt="Make logo" loading="lazy"></div>
             <div class="tool-name">Make</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#ff4a0022,#ff4a0044)">🔗</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=zapier.com&sz=128" alt="Zapier logo" loading="lazy"></div>
             <div class="tool-name">Zapier</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#ef444422,#ef444444)">🔵</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=meta.com&sz=128" alt="Meta Ads logo" loading="lazy"></div>
             <div class="tool-name">Meta Ads</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#4285f422,#4285f444)">📊</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=ads.google.com&sz=128" alt="Google Ads logo" loading="lazy"></div>
             <div class="tool-name">Google Ads</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#ffe01b22,#ffe01b44)">📧</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=mailchimp.com&sz=128" alt="Mailchimp logo" loading="lazy"></div>
             <div class="tool-name">Mailchimp</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#25d36622,#25d36644)">💬</div>
+            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=whatsapp.com&sz=128" alt="WhatsApp Business logo" loading="lazy"></div>
             <div class="tool-name">WhatsApp Business</div>
           </div>
         </div>
