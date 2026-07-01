@@ -118,20 +118,20 @@ nav {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 1000;
-  padding: 18px 0;
+  padding: 24px 0;
   transition: all .4s ease;
 }
 nav.scrolled {
   background: rgba(8,11,20,0.92);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
-  padding: 12px 0;
+  padding: 15px 0;
 }
 nav .container { max-width: 1300px; }
-.nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 22px; }
 .nav-logo {
   font-family: var(--font-display);
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 800;
   background: linear-gradient(90deg, var(--indigo), var(--cyan));
   -webkit-background-clip: text;
@@ -140,10 +140,10 @@ nav .container { max-width: 1300px; }
   flex-shrink: 0;
   white-space: nowrap;
 }
-.nav-logo span { font-family: var(--font-mono); font-size: 14px; opacity: .5; }
+.nav-logo span { font-family: var(--font-mono); font-size: 15px; opacity: .5; }
 .nav-links {
   display: flex;
-  gap: 15px;
+  gap: 32px;
   list-style: none;
   flex-shrink: 1;
   min-width: 0;
@@ -155,7 +155,7 @@ nav .container { max-width: 1300px; }
 .nav-links::-webkit-scrollbar { display: none; }
 .nav-links li { flex-shrink: 0; }
 .nav-links a {
-  font-size: 12.5px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--muted);
   letter-spacing: .3px;
@@ -174,10 +174,10 @@ nav .container { max-width: 1300px; }
 .nav-links a:hover { color: var(--white); }
 .nav-links a:hover::after { transform: scaleX(1); }
 .nav-cta {
-  font-size: 12.5px;
+  font-size: 14.5px;
   font-weight: 600;
-  padding: 9px 18px;
-  border-radius: 8px;
+  padding: 12px 26px;
+  border-radius: 9px;
   border: 1px solid var(--indigo);
   color: var(--indigo);
   transition: all .2s;
@@ -189,15 +189,79 @@ nav .container { max-width: 1300px; }
 .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
 .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: all .3s; }
 
+/* MORE dropdown (nav) */
+.nav-more-wrap { position: relative; display: block; flex-shrink: 0; }
+.nav-more-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: .3px;
+  font-family: var(--font-body);
+  padding: 6px 2px;
+  transition: color .2s;
+}
+.nav-more-btn:hover, .nav-more-wrap.open .nav-more-btn { color: var(--white); }
+.nav-more-arrow { font-size: 11px; transition: transform .2s; display: inline-block; }
+.nav-more-wrap.open .nav-more-arrow { transform: rotate(180deg); }
+.nav-more-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px;
+  min-width: 210px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+  z-index: 1200;
+  animation: dropIn .2s ease;
+}
+.nav-more-wrap.open .nav-more-dropdown { display: block; }
+.nav-more-link {
+  display: block;
+  padding: 11px 14px;
+  border-radius: 8px;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--white);
+  transition: background .15s;
+}
+.nav-more-link:hover { background: rgba(108,99,255,0.12); }
+.nav-more-resume-row { display: flex; align-items: center; gap: 4px; }
+.nav-more-resume-row .nav-more-link { flex: 1; }
+.nav-more-resume-edit {
+  width: 30px; height: 30px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: rgba(0,212,255,0.1);
+  border: 1px solid var(--border2);
+  color: var(--cyan);
+  font-size: 12px;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s;
+}
+.nav-more-resume-edit:hover { background: rgba(0,212,255,0.2); }
+
 /* SETTINGS BTN in nav */
 .nav-settings-wrap { position: relative; display: block; flex-shrink: 0; }
 .nav-settings-btn {
-  width: 36px; height: 36px;
+  width: 42px; height: 42px;
   border-radius: 50%;
   background: rgba(108,99,255,0.12);
   border: 1px solid var(--border);
   color: var(--white);
-  font-size: 17px;
+  font-size: 19px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -938,6 +1002,59 @@ nav .container { max-width: 1300px; }
   font-family: var(--font-mono);
 }
 .result-arrow { font-size: 16px; }
+
+/* ===== CERTIFICATIONS ===== */
+.cert-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; margin-top: 48px; }
+.cert-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all .35s ease;
+}
+.cert-card:hover { transform: translateY(-8px); box-shadow: 0 24px 70px rgba(108,99,255,0.15); border-color: rgba(108,99,255,0.3); }
+.cert-thumb-wrap { height: 170px; overflow: hidden; cursor: pointer; position: relative; background: var(--card2); }
+.cert-thumb-img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+.cert-thumb-wrap:hover .cert-thumb-img { transform: scale(1.06); }
+.cert-thumb-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 44px; }
+.cert-body { padding: 20px 22px; }
+.cert-title { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 6px; line-height: 1.35; }
+.cert-issuer { font-size: 12.5px; color: var(--cyan); font-family: var(--font-mono); margin-bottom: 3px; }
+.cert-date { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+.cert-link { display: inline-flex; margin-top: 6px; font-size: 12px; color: var(--indigo); font-family: var(--font-mono); }
+
+/* ===== RESUME BUTTON (nav / footer / drawer) ===== */
+.nav-resume-btn {
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border2);
+  color: var(--cyan);
+  transition: all .2s;
+  font-family: var(--font-display);
+  flex-shrink: 0;
+  white-space: nowrap;
+  display: none;
+  align-items: center;
+  gap: 6px;
+}
+.nav-resume-btn:hover { background: var(--cyan); color: #06121a; box-shadow: var(--glow-c); }
+.nav-resume-edit-btn {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: rgba(0,212,255,0.1);
+  border: 1px solid var(--border2);
+  color: var(--cyan);
+  font-size: 12px;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all .2s;
+}
+.nav-resume-edit-btn:hover { background: rgba(0,212,255,0.2); }
 
 /* ===== TESTIMONIALS ===== */
 #testimonials { background: var(--bg2); }
@@ -1893,6 +2010,7 @@ footer {
   .process-steps::before { display: none; }
   .process-step { flex: 0 0 calc(50% - 10px); }
   .nav-links { display: none; }
+  .nav-more-wrap { display: none; }
   .nav-cta { display: none; }
   .hamburger { display: flex; }
   .nav-inner { gap: 12px; }
@@ -2174,15 +2292,25 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
         <li><a href="#about">About</a></li>
         <li><a href="#services">Services</a></li>
         <li><a href="#portfolio">Work</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#tools">Tools</a></li>
-        <li><a href="#youtube">YouTube</a></li>
-        <li><a href="#blog">Blog</a></li>
-        <li><a href="#process">Process</a></li>
         <li><a href="#pricing">Pricing</a></li>
-        <li><a href="#testimonials">Reviews</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
+      <div class="nav-more-wrap" id="navMoreWrap">
+        <button class="nav-more-btn" id="navMoreBtn" type="button" aria-haspopup="true" aria-expanded="false">More <span class="nav-more-arrow">▾</span></button>
+        <div class="nav-more-dropdown" id="navMoreDropdown">
+          <a href="#skills" class="nav-more-link">Skills</a>
+          <a href="#certifications" class="nav-more-link">Certificate</a>
+          <div class="nav-more-resume-row">
+            <a href="#" id="navResumeBtn" class="nav-more-link" title="Download Resume">📄 Resume</a>
+            <button id="navResumeEditBtn" class="nav-more-resume-edit admin-only" title="Manage Resume" onclick="closeNavMoreDropdown();openResumeModal()">✏</button>
+          </div>
+          <a href="#process" class="nav-more-link">Process</a>
+          <a href="#testimonials" class="nav-more-link">Reviews</a>
+          <a href="#youtube" class="nav-more-link">YouTube</a>
+          <a href="#blog" class="nav-more-link">Blog</a>
+          <a href="#tools" class="nav-more-link">Tools</a>
+        </div>
+      </div>
       <a href="#contact" class="nav-cta">Hire Me →</a>
       <div class="nav-settings-wrap" id="navSettingsWrap">
         <button class="nav-settings-btn" id="navSettingsBtn" aria-label="Settings">⚙️</button>
@@ -2208,14 +2336,16 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
   <a href="#about" class="mm-link">📌 About</a>
   <a href="#services" class="mm-link">🛠️ Services</a>
   <a href="#portfolio" class="mm-link">💼 Work</a>
+  <a href="#pricing" class="mm-link">💰 Pricing</a>
+  <a href="#contact" class="mm-link">📩 Contact</a>
   <a href="#skills" class="mm-link">⚡ Skills</a>
-  <a href="#tools" class="mm-link">🧰 Tools</a>
+  <a href="#certifications" class="mm-link">🎓 Certificate</a>
+  <a href="#" id="mmResumeBtn" class="mm-link">📄 Resume</a>
+  <a href="#process" class="mm-link">🔄 Process</a>
+  <a href="#testimonials" class="mm-link">⭐ Reviews</a>
   <a href="#youtube" class="mm-link">▶️ YouTube</a>
   <a href="#blog" class="mm-link">📝 Blog</a>
-  <a href="#process" class="mm-link">🔄 Process</a>
-  <a href="#pricing" class="mm-link">💰 Pricing</a>
-  <a href="#testimonials" class="mm-link">⭐ Reviews</a>
-  <a href="#contact" class="mm-link">📩 Contact</a>
+  <a href="#tools" class="mm-link">🧰 Tools</a>
   <a href="#contact" class="mm-link drawer-hire-btn">🚀 Hire Me</a>
 </div>
 
@@ -2780,6 +2910,107 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
     </div>
   </div>
 </section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications" class="section">
+  <div class="container">
+    <div class="reveal" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:48px;">
+      <div>
+        <div class="section-label">Credentials</div>
+        <h2 class="section-title">Certifications & <span>Courses</span></h2>
+        <p class="section-sub">Courses and certifications that back up the skills — including Bivinno and other platforms.</p>
+      </div>
+      <button class="admin-only" id="openCertModal" style="display:none;align-items:center;gap:8px;padding:10px 20px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(108,99,255,0.35);transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">＋ Add Certificate</button>
+    </div>
+    <div class="cert-grid" id="certGrid"><!-- injected by JS --></div>
+    <div id="certEmpty" style="display:none;text-align:center;padding:60px 24px;border:2px dashed var(--border);border-radius:16px;color:var(--muted);">
+      <div style="font-size:48px;margin-bottom:12px;">🎓</div>
+      <div style="font-size:14px;">No certifications yet. Login as admin to add the first certificate!</div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATE ADD/EDIT MODAL -->
+<div id="certModal" class="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(10px);z-index:3000;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#111827;border:1px solid rgba(108,99,255,0.3);border-radius:20px;padding:32px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 0 60px rgba(108,99,255,0.2);">
+    <button onclick="closeCertModal()" style="position:absolute;top:16px;right:18px;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;">✕</button>
+    <div style="font-size:13px;font-family:var(--font-mono);color:var(--cyan);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;" id="certModalLabel">// ADD CERTIFICATE</div>
+    <div style="font-size:20px;font-weight:800;color:var(--white);margin-bottom:24px;" id="certModalTitle">New Certificate</div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">CERTIFICATE TITLE *</label>
+        <input id="certTitleInput" type="text" placeholder="e.g. Bivinno — AI Automation Course" style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">ISSUER / PLATFORM</label>
+        <input id="certIssuerInput" type="text" placeholder="e.g. Bivinno" style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">DATE / DURATION</label>
+        <input id="certDateInput" type="text" placeholder="e.g. Jan 2026" style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">CREDENTIAL LINK (optional)</label>
+        <input id="certLinkInput" type="url" placeholder="https://..." style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">CERTIFICATE IMAGE *</label>
+        <label id="certUploadLabel" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:18px;border:2px dashed rgba(108,99,255,0.35);border-radius:10px;cursor:pointer;transition:all .2s;background:rgba(108,99,255,0.04);" onmouseover="this.style.borderColor='var(--indigo)'" onmouseout="this.style.borderColor='rgba(108,99,255,0.35)'">
+          <span style="font-size:26px;">📎</span>
+          <span style="font-size:12px;font-family:var(--font-mono);color:var(--muted);">Click to upload certificate image (JPG/PNG)</span>
+          <span id="certFileName" style="font-size:11px;color:var(--cyan);font-family:var(--font-mono);display:none;word-break:break-all;text-align:center;"></span>
+          <input id="certImageInput" type="file" accept="image/*" style="display:none;" onchange="handleCertImageSelect(this)">
+        </label>
+        <div id="certPreviewWrap" style="display:none;margin-top:10px;border-radius:10px;overflow:hidden;max-height:180px;position:relative;">
+          <img id="certPreviewImg" style="width:100%;height:180px;object-fit:cover;display:block;" alt="preview">
+          <button onclick="clearCertImage()" style="position:absolute;top:6px;right:6px;background:rgba(255,50,50,0.75);color:#fff;border:none;border-radius:50%;width:24px;height:24px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:22px;">
+      <button id="certSaveBtn" onclick="saveCert()" style="flex:1;padding:13px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;">Save Certificate →</button>
+      <button onclick="closeCertModal()" style="padding:13px 20px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;font-family:var(--font-display);font-size:14px;cursor:pointer;transition:all .2s;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- CERTIFICATE IMAGE LIGHTBOX -->
+<div id="certLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:5000;align-items:center;justify-content:center;padding:24px;cursor:zoom-out;" onclick="closeCertLightbox()">
+  <img id="certLightboxImg" style="max-width:100%;max-height:90vh;border-radius:12px;box-shadow:0 0 60px rgba(0,0,0,0.6);" alt="Certificate">
+</div>
+
+<!-- RESUME MANAGER MODAL (admin) -->
+<div id="resumeModal" class="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(10px);z-index:3000;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#111827;border:1px solid rgba(108,99,255,0.3);border-radius:20px;padding:32px;width:100%;max-width:480px;position:relative;box-shadow:0 0 60px rgba(108,99,255,0.2);">
+    <button onclick="closeResumeModal()" style="position:absolute;top:16px;right:18px;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;">✕</button>
+    <div style="font-size:13px;font-family:var(--font-mono);color:var(--cyan);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">// RESUME</div>
+    <div style="font-size:20px;font-weight:800;color:var(--white);margin-bottom:24px;">Upload / Update Resume</div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">BUTTON LABEL</label>
+        <input id="resumeTitleInput" type="text" placeholder="Resume" style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">RESUME FILE (PDF) *</label>
+        <label id="resumeUploadLabel" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:18px;border:2px dashed rgba(108,99,255,0.35);border-radius:10px;cursor:pointer;transition:all .2s;background:rgba(108,99,255,0.04);" onmouseover="this.style.borderColor='var(--indigo)'" onmouseout="this.style.borderColor='rgba(108,99,255,0.35)'">
+          <span style="font-size:26px;">📎</span>
+          <span style="font-size:12px;font-family:var(--font-mono);color:var(--muted);">Click to upload PDF resume</span>
+          <span id="resumeFileName" style="font-size:11px;color:var(--cyan);font-family:var(--font-mono);display:none;word-break:break-all;text-align:center;"></span>
+          <input id="resumeFileInput" type="file" accept="application/pdf" style="display:none;" onchange="handleResumeFileSelect(this)">
+        </label>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:22px;">
+      <button id="resumeSaveBtn" onclick="saveResume()" style="flex:1;padding:13px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;">Save Resume →</button>
+      <button onclick="removeResumeFile()" style="padding:13px 16px;background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:10px;font-family:var(--font-display);font-size:13px;cursor:pointer;">🗑 Remove</button>
+      <button onclick="closeResumeModal()" style="padding:13px 20px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;font-family:var(--font-display);font-size:14px;cursor:pointer;transition:all .2s;">Cancel</button>
+    </div>
+  </div>
+</div>
 
 <!-- PROJECT ADD/EDIT MODAL -->
 <div id="projectModal" class="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(10px);z-index:3000;align-items:center;justify-content:center;padding:20px;">
@@ -3447,11 +3678,13 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
         <div class="footer-links-title">Navigate</div>
         <a href="#about">About Me</a>
         <a href="#portfolio">Portfolio</a>
+        <a href="#certifications">Certifications</a>
         <a href="#youtube">YouTube</a>
         <a href="#blog">Blog</a>
         <a href="#testimonials">Reviews</a>
         <a href="#process">Process</a>
         <a href="#faq">FAQ</a>
+        <a href="#" id="footerResumeLink" style="display:none;">📄 Download Resume</a>
       </div>
       <div class="footer-links-group">
         <div class="footer-links-title">Hire Me On</div>
@@ -3835,6 +4068,7 @@ function checkAdmin() {
         showAdminUI();
         renderYtVideos(); renderBlog(); renderProjects(); renderReviews();
         renderClientPricing(); fivRenderCats(); fivRenderHeadline(); fivRenderTabs(); fivRenderCard();
+        renderCertifications(); renderResumeButtons();
       } else {
         isAdmin = false;
         _masterKey = null;
@@ -3906,6 +4140,8 @@ async function doAdminLogin() {
   fivRenderHeadline();
   fivRenderTabs();
   fivRenderCard();
+  renderCertifications();
+  renderResumeButtons();
   btn.textContent = 'Login to Admin Panel →';
   btn.disabled = false;
 
@@ -3933,6 +4169,8 @@ async function adminLogout() {
   fivRenderHeadline();
   fivRenderTabs();
   fivRenderCard();
+  renderCertifications();
+  renderResumeButtons();
 }
 
 function showAdminUI() {
@@ -4559,6 +4797,252 @@ function clearProjectMedia() {
 }
 
 // ===================================================
+// CERTIFICATIONS SECTION
+// ===================================================
+let certifications = [];
+let editingCertIndex = null;
+let _currentCertImage = null;
+
+function renderCertifications() {
+  const grid = document.getElementById('certGrid');
+  const empty = document.getElementById('certEmpty');
+  if (!grid || !empty) return;
+  if (!certifications.length) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = certifications.map((c, i) => `
+    <div class="cert-card reveal visible">
+      <div class="cert-thumb-wrap" onclick="openCertLightbox(${i})">
+        ${c.image && c.image.data ? `<img class="cert-thumb-img" src="${c.image.data}" alt="${c.title}" loading="lazy">` : `<div class="cert-thumb-fallback">🎓</div>`}
+      </div>
+      <div class="cert-body">
+        <div class="cert-title">${c.title}</div>
+        ${c.issuer ? `<div class="cert-issuer">${c.issuer}</div>` : ''}
+        ${c.date ? `<div class="cert-date">${c.date}</div>` : ''}
+        ${c.link ? `<a href="${c.link}" target="_blank" rel="noopener" class="cert-link">View Credential →</a>` : ''}
+        ${isAdmin ? `
+        <div style="display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+          <button onclick="openEditCert(${i})" style="flex:1;padding:7px;background:rgba(108,99,255,0.1);border:1px solid rgba(108,99,255,0.25);color:var(--indigo);border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;transition:all .2s;" onmouseover="this.style.background='rgba(108,99,255,0.2)'" onmouseout="this.style.background='rgba(108,99,255,0.1)'">✏ Edit</button>
+          <button onclick="removeCert(${i})" style="padding:7px 14px;background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;transition:all .2s;" onmouseover="this.style.background='rgba(255,50,50,0.16)'" onmouseout="this.style.background='rgba(255,50,50,0.08)'">✕</button>
+        </div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function openCertModal() {
+  if (!isAdmin) { alert('🔐 Admin login required.'); return; }
+  editingCertIndex = null;
+  document.getElementById('certModalLabel').textContent = '// ADD CERTIFICATE';
+  document.getElementById('certModalTitle').textContent = 'New Certificate';
+  document.getElementById('certSaveBtn').textContent = 'Save Certificate →';
+  ['certTitleInput','certIssuerInput','certDateInput','certLinkInput'].forEach(id => document.getElementById(id).value = '');
+  clearCertImage();
+  document.getElementById('certModal').style.display = 'flex';
+}
+
+function openEditCert(i) {
+  if (!isAdmin) return;
+  editingCertIndex = i;
+  const c = certifications[i];
+  document.getElementById('certModalLabel').textContent = '// EDIT CERTIFICATE';
+  document.getElementById('certModalTitle').textContent = 'Edit Certificate';
+  document.getElementById('certSaveBtn').textContent = 'Update Certificate →';
+  document.getElementById('certTitleInput').value = c.title || '';
+  document.getElementById('certIssuerInput').value = c.issuer || '';
+  document.getElementById('certDateInput').value = c.date || '';
+  document.getElementById('certLinkInput').value = c.link || '';
+  clearCertImage();
+  if (c.image && c.image.data) {
+    _currentCertImage = c.image;
+    const fn = document.getElementById('certFileName');
+    fn.textContent = '✅ Existing image loaded';
+    fn.style.display = 'block';
+    document.getElementById('certPreviewWrap').style.display = 'block';
+    document.getElementById('certPreviewImg').src = c.image.data;
+  }
+  document.getElementById('certModal').style.display = 'flex';
+}
+
+function closeCertModal() {
+  document.getElementById('certModal').style.display = 'none';
+  editingCertIndex = null;
+}
+
+function handleCertImageSelect(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const fn = document.getElementById('certFileName');
+  fn.textContent = '⏳ Loading: ' + file.name;
+  fn.style.display = 'block';
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    _currentCertImage = { data: e.target.result, type: file.type, name: file.name };
+    fn.textContent = '✅ ' + file.name;
+    document.getElementById('certPreviewWrap').style.display = 'block';
+    document.getElementById('certPreviewImg').src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearCertImage() {
+  _currentCertImage = null;
+  const input = document.getElementById('certImageInput');
+  if (input) input.value = '';
+  const fn = document.getElementById('certFileName');
+  if (fn) fn.style.display = 'none';
+  const wrap = document.getElementById('certPreviewWrap');
+  if (wrap) wrap.style.display = 'none';
+}
+
+async function saveCert() {
+  if (!isAdmin) return;
+  const title = document.getElementById('certTitleInput').value.trim();
+  if (!title) { alert('Certificate title is required!'); return; }
+  if (!_currentCertImage) { alert('Please upload a certificate image!'); return; }
+
+  const btn = document.getElementById('certSaveBtn');
+  const orig = btn.textContent;
+  btn.textContent = 'Saving...'; btn.disabled = true;
+
+  const cert = {
+    title,
+    issuer: document.getElementById('certIssuerInput').value.trim(),
+    date:   document.getElementById('certDateInput').value.trim(),
+    link:   document.getElementById('certLinkInput').value.trim(),
+    image:  _currentCertImage,
+  };
+
+  if (editingCertIndex !== null) {
+    certifications[editingCertIndex] = cert;
+  } else {
+    certifications.unshift(cert);
+  }
+
+  await sharedSet('certifications', certifications);
+  closeCertModal();
+  btn.textContent = orig; btn.disabled = false;
+  renderCertifications();
+}
+
+async function removeCert(i) {
+  if (!isAdmin) return;
+  if (!confirm('Delete this certificate?')) return;
+  certifications.splice(i, 1);
+  await sharedSet('certifications', certifications);
+  renderCertifications();
+}
+
+function openCertLightbox(i) {
+  const c = certifications[i];
+  if (!c || !c.image || !c.image.data) return;
+  document.getElementById('certLightboxImg').src = c.image.data;
+  document.getElementById('certLightbox').style.display = 'flex';
+}
+function closeCertLightbox() {
+  document.getElementById('certLightbox').style.display = 'none';
+}
+
+document.getElementById('certModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeCertModal(); });
+document.getElementById('openCertModal').addEventListener('click', openCertModal);
+
+// ===================================================
+// RESUME (PDF) — small download button in nav / footer / drawer
+// ===================================================
+let resumeData = null; // { data, name, title }
+let _currentResumeFile = null;
+
+function renderResumeButtons() {
+  const navBtn    = document.getElementById('navResumeBtn');
+  const footerLink = document.getElementById('footerResumeLink');
+  const mmBtn     = document.getElementById('mmResumeBtn');
+  const editBtn   = document.getElementById('navResumeEditBtn');
+  if (!navBtn) return;
+
+  if (resumeData && resumeData.data) {
+    const label = '📄 ' + (resumeData.title || 'Resume');
+    if (navBtn) { navBtn.style.display = 'block'; navBtn.textContent = label; navBtn.href = resumeData.data; navBtn.setAttribute('download', resumeData.name || 'Resume.pdf'); navBtn.onclick = closeNavMoreDropdown; }
+    if (mmBtn)  { mmBtn.style.display = 'flex'; mmBtn.textContent = label; mmBtn.href = resumeData.data; mmBtn.setAttribute('download', resumeData.name || 'Resume.pdf'); mmBtn.onclick = null; }
+    if (footerLink) { footerLink.style.display = 'inline-block'; footerLink.textContent = '📄 Download ' + (resumeData.title || 'Resume'); footerLink.href = resumeData.data; footerLink.setAttribute('download', resumeData.name || 'Resume.pdf'); footerLink.onclick = null; }
+    if (editBtn) editBtn.style.display = isAdmin ? 'flex' : 'none';
+  } else if (isAdmin) {
+    const openEdit = (e) => { e.preventDefault(); closeNavMoreDropdown(); openResumeModal(); };
+    if (navBtn) { navBtn.style.display = 'block'; navBtn.textContent = '＋ Add Resume'; navBtn.removeAttribute('download'); navBtn.href = 'javascript:void(0)'; navBtn.onclick = openEdit; }
+    if (mmBtn)  { mmBtn.style.display = 'flex'; mmBtn.textContent = '＋ Add Resume'; mmBtn.removeAttribute('download'); mmBtn.href = 'javascript:void(0)'; mmBtn.onclick = openEdit; }
+    if (footerLink) footerLink.style.display = 'none';
+    if (editBtn) editBtn.style.display = 'none';
+  } else {
+    [navBtn, footerLink, mmBtn].forEach(el => { if (el) el.style.display = 'none'; });
+    if (editBtn) editBtn.style.display = 'none';
+  }
+}
+
+function closeNavMoreDropdown() {
+  const wrap = document.getElementById('navMoreWrap');
+  if (wrap) wrap.classList.remove('open');
+}
+
+function openResumeModal() {
+  if (!isAdmin) return;
+  document.getElementById('resumeTitleInput').value = (resumeData && resumeData.title) || 'Resume';
+  _currentResumeFile = null;
+  const fn = document.getElementById('resumeFileName');
+  if (resumeData && resumeData.data) {
+    fn.textContent = '✅ Current: ' + (resumeData.name || 'resume.pdf');
+    fn.style.display = 'block';
+  } else {
+    fn.style.display = 'none';
+  }
+  document.getElementById('resumeModal').style.display = 'flex';
+}
+function closeResumeModal() { document.getElementById('resumeModal').style.display = 'none'; }
+
+function handleResumeFileSelect(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const fn = document.getElementById('resumeFileName');
+  fn.textContent = '⏳ Loading: ' + file.name;
+  fn.style.display = 'block';
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    _currentResumeFile = { data: e.target.result, type: file.type, name: file.name };
+    fn.textContent = '✅ ' + file.name;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function saveResume() {
+  if (!isAdmin) return;
+  const fileToSave = _currentResumeFile || resumeData;
+  if (!fileToSave || !fileToSave.data) { alert('Please upload a PDF file!'); return; }
+  const btn = document.getElementById('resumeSaveBtn');
+  const orig = btn.textContent;
+  btn.textContent = 'Saving...'; btn.disabled = true;
+  resumeData = {
+    data:  fileToSave.data,
+    name:  fileToSave.name || 'Resume.pdf',
+    title: document.getElementById('resumeTitleInput').value.trim() || 'Resume',
+  };
+  await sharedSet('resume', resumeData);
+  closeResumeModal();
+  btn.textContent = orig; btn.disabled = false;
+  renderResumeButtons();
+}
+
+async function removeResumeFile() {
+  if (!isAdmin) return;
+  if (!confirm('Remove the uploaded resume?')) return;
+  resumeData = null;
+  await sharedSet('resume', null);
+  closeResumeModal();
+  renderResumeButtons();
+}
+
+document.getElementById('resumeModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeResumeModal(); });
+
+// ===================================================
 // CLIENT CUSTOM PRICING — Admin can add special deals
 // ===================================================
 let clientPricings = [];
@@ -4911,6 +5395,8 @@ async function initSharedData() {
     if (record.fiv_categories)  fivCategories   = record.fiv_categories;
     else if (record.fiv_plans)  fivCategories[0].plans = record.fiv_plans; // backward compat
     if (record.reviews)        reviews         = record.reviews;
+    if (record.certifications) certifications  = record.certifications;
+    if (record.resume !== undefined) resumeData = record.resume;
   }
 
   renderYtChannel();
@@ -4924,6 +5410,8 @@ async function initSharedData() {
   fivRenderTabs();
   fivRenderCard();
   renderProfileImages();
+  renderCertifications();
+  renderResumeButtons();
 }
 
 // ===== MARQUEE — JS controlled (PC slow, mobile fast) =====
@@ -4979,6 +5467,26 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
   document.addEventListener('click', () => drop.classList.remove('open'));
   drop.addEventListener('click', (e) => e.stopPropagation());
+})();
+
+// ===== NAV "MORE" DROPDOWN =====
+(function() {
+  const wrap = document.getElementById('navMoreWrap');
+  const btn = document.getElementById('navMoreBtn');
+  const dropdown = document.getElementById('navMoreDropdown');
+  if (!wrap || !btn || !dropdown) return;
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const willOpen = !wrap.classList.contains('open');
+    wrap.classList.toggle('open', willOpen);
+    btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+  });
+  document.addEventListener('click', () => { wrap.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); });
+  dropdown.addEventListener('click', (e) => e.stopPropagation());
+  // Close dropdown after picking a regular section link (resume link handles its own close)
+  dropdown.querySelectorAll('a.nav-more-link[href^="#"]').forEach(link => {
+    link.addEventListener('click', () => { wrap.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); });
+  });
 })();
 
 // ===== DARK / LIGHT MODE TOGGLE =====
